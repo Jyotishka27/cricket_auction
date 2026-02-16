@@ -1,18 +1,66 @@
-<!-- State & config -->
-<script src="./js/config.js"></script>
-<script src="./js/state.js"></script>
-<script src="./js/utils.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cricket Auctioneer</title>
 
-<!-- Core logic -->
-<script src="./js/timer.js"></script>
-<script src="./js/storage.js"></script>
-<script src="./js/actions.js"></script>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-<!-- UI -->
-<script src="./js/renderer.js"></script>
+<body class="bg-slate-100 text-slate-800">
 
-<!-- Automation -->
-<script src="./js/autosave.js"></script>
+  <!-- ============================= -->
+  <!-- YOUR EXISTING HTML UI HERE   -->
+  <!-- (keep your full UI layout)   -->
+  <!-- ============================= -->
 
-<!-- Bootstrap LAST -->
-<script src="./js/main.js"></script>
+
+  <!-- ============================= -->
+  <!-- SCRIPT ORDER (DO NOT CHANGE) -->
+  <!-- ============================= -->
+
+  <!-- Config + State -->
+  <script src="./js/config.js"></script>
+  <script src="./js/state.js"></script>
+  <script src="./js/utils.js"></script>
+
+  <!-- Core Logic -->
+  <script src="./js/timer.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/actions.js"></script>
+
+  <!-- UI Renderer -->
+  <script src="./js/renderer.js"></script>
+
+  <!-- Autosave -->
+  <script src="./js/autosave.js"></script>
+
+  <!-- ============================= -->
+  <!-- BOOTSTRAP (main.js moved here) -->
+  <!-- ============================= -->
+
+  <script>
+  (async function initAuction() {
+    try {
+      await loadAuctionData();
+
+      const restored = restoreAutoSavedState();
+      if (!restored && typeof cloneData === "function") {
+        cloneData();
+      }
+
+      if (typeof wireEvents === "function") {
+        wireEvents();
+      }
+
+      renderAll();
+    } catch (err) {
+      console.error("Initialization failed:", err);
+    }
+  })();
+  </script>
+
+</body>
+</html>
