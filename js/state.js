@@ -1,6 +1,6 @@
 const state = {
-  pools: { X: [], P: [], A: [], B: [], C: [], UNSOLD: [] },
-  skipped: { X: [], P: [], A: [], B: [], C: [], UNSOLD: [] },
+  pools: { X: [], P: [], A: [], B: [], UNSOLD: [] },
+  skipped: { X: [], P: [], A: [], B: [], UNSOLD: [] },
   category: 'X',
   current: null,
   teams: [],
