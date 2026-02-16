@@ -1,15 +1,15 @@
 {
   "captains": [
-    { "name": "Aakash Singh", "budget": 3000000 },
-    { "name": "Ankit Aich", "budget": 3000000 },
-    { "name": "Dipanjan Majumder", "budget": 3000000 },
-    { "name": "Sankhaneel Roychowdhury", "budget": 3000000 },
-    { "name": "Subhamoy Das", "budget": 3000000 },
-    { "name": "Thomas Joseph", "budget": 3000000 },
-    { "name": "Yash Agarwal", "budget": 3000000 },
-    { "name": "Subhamoy Das", "budget": 3000000 },
-    { "name": "Thomas Joseph", "budget": 3000000 },
-    { "name": "Yash Agarwal", "budget": 3000000 }
+    { "name": "Team A", "budget": 3000000 },
+    { "name": "Team B", "budget": 3000000 },
+    { "name": "Team C", "budget": 3000000 },
+    { "name": "Team D", "budget": 3000000 },
+    { "name": "Team E", "budget": 3000000 },
+    { "name": "Team F", "budget": 3000000 },
+    { "name": "Team G", "budget": 3000000 },
+    { "name": "Team H", "budget": 3000000 },
+    { "name": "Team I", "budget": 3000000 },
+    { "name": "Team J", "budget": 3000000 }
   ],
   
   "players": {
