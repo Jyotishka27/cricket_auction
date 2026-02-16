@@ -26,7 +26,7 @@ async function loadAuctionData() {
 
     // Reset runtime values
     state.sales = [];
-    state.skipped = { X: [], P: [], A: [], B: [], C: [], UNSOLD: [] };
+    state.skipped = { X: [], P: [], A: [], B: [], UNSOLD: [] };
     state.current = null;
     state.timer = { handle: null, left: 0, running: false };
 
