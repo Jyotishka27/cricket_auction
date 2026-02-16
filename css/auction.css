@@ -1,0 +1,96 @@
+/* ===============================
+   auction.css
+   Custom styles for Auctioneer
+   =============================== */
+
+/* Base font */
+body {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* -------------------------------
+   Countdown blink animation
+-------------------------------- */
+.countdown.blink {
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* Smooth scrolling (fallback if Tailwind removed) */
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+/* -------------------------------
+   Player image container
+-------------------------------- */
+.player-img-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid #cbd5e0; /* slate-300 */
+  border-radius: 0.75rem; /* rounded-xl */
+  background-color: #f1f5f9; /* slate-100 */
+}
+
+.player-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+}
+
+/* Fallback for direct player images */
+img[alt="player"] {
+  object-fit: cover;
+}
+
+/* -------------------------------
+   Disabled buttons
+-------------------------------- */
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* -------------------------------
+   Minor UI polish
+-------------------------------- */
+details > summary {
+  list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Reduce accidental text selection */
+button,
+summary {
+  user-select: none;
+}
+
+/* Ensure long team names don’t break layout */
+#teamsTable button span {
+  white-space: nowrap;
+}
+
+/* Mobile improvements */
+@media (max-width: 640px) {
+  #teamsTable {
+    font-size: 0.9rem;
+  }
+
+  #results ul {
+    padding-left: 1rem;
+  }
+}
+

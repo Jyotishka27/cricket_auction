@@ -1,0 +1,51 @@
+{
+  "captains": [
+    { "name": "Aakash Singh", "budget": 3000000 },
+    { "name": "Ankit Aich", "budget": 3000000 },
+    { "name": "Dipanjan Majumder", "budget": 3000000 },
+    { "name": "Sankhaneel Roychowdhury", "budget": 3000000 },
+    { "name": "Subhamoy Das", "budget": 3000000 },
+    { "name": "Thomas Joseph", "budget": 3000000 },
+    { "name": "Yash Agarwal", "budget": 3000000 }
+  ],
+  "players": {
+    "X": [
+      { "id": "x1", "name": "Aditya Chakraborty", "position": "GK", "basePrice": 400000, "img": "../players/adi.jpg" },
+      { "id": "x2", "name": "Arka Dutta", "position": "GK", "basePrice": 400000, "img": "../players/arka_dutta_amity.jpg" },
+      { "id": "x3", "name": "Arnab Talukdar", "position": "GK", "basePrice": 400000, "img": "../players/arnab_talukdar.jpg" },
+      { "id": "x4", "name": "Ayon Roy", "position": "GK", "basePrice": 400000, "img": "../players/ayon_roy.jpg" },
+      { "id": "x5", "name": "Srinjoy Kundu", "position": "GK", "basePrice": 400000, "img": "../players/srinjoy_kundu.jpg" },
+      { "id": "x6", "name": "Rupayan Chakravarty", "position": "GK", "basePrice": 400000, "img": "../players/rupayan_chakrabarty.jpg" },
+      { "id": "x7", "name": "Shrish Mukherjee", "position": "GK", "basePrice": 400000, "img": "../players/shrish_mukherjee.jpg" }
+    ],
+    "P": [
+      { "id": "p1", "name": "Soumik Mukherjee", "position": "CM", "basePrice": 600000, "img": "../players/soumik_mukherjee.jpg" },
+      { "id": "p2", "name": "Supratim Sengupta", "position": "ST", "basePrice": 600000, "img": "../players/supratim_sengupta.jpg" },
+      { "id": "p3", "name": "Vasu Gupta", "position": "ST", "basePrice": 600000, "img": "../players/vasu.jpg" },
+      { "id": "p4", "name": "China", "position": "CM", "basePrice": 600000, "img": "../players/china.jpg" }
+    ],
+    "A": [
+      { "id": "a1", "name": "Kaustav Guha Mazumdar", "position": "CM", "basePrice": 500000, "img": "../players/kaustav_guha_mazumdar.jpg" },
+      { "id": "a2", "name": "Rahul Sarkar", "position": "CD", "basePrice": 400000, "img": "../players/rahul_sarkar.jpg" },
+      { "id": "a3", "name": "Ritam Chowdhury", "position": "CM", "basePrice": 500000, "img": "../players/ritam_chowdhury.jpeg" }
+    ],
+    "B": [
+      { "id": "b1", "name": "Akash Mukherjee", "position": "CM", "basePrice": 400000, "img": "../players/akash_mukherjee.jpg" },
+      { "id": "b2", "name": "Aman Pandey", "position": "CM", "basePrice": 400000, "img": "../players/aman_kumar_pandey.jpg" },
+      { "id": "b3", "name": "Arjobroto Das (Arjo)", "position": "ST", "basePrice": 400000, "img": "../players/arjobroto_das.jpg" },
+      { "id": "b4", "name": "Hrishi", "position": "ST", "basePrice": 400000, "img": "../players/hrishi.jpg" },
+      { "id": "b5", "name": "Moinak Dwarik", "position": "CD", "basePrice": 400000, "img": "../players/moinak_dwarik.jpg" },
+      { "id": "b6", "name": "Satyaki Das", "position": "CM", "basePrice": 400000, "img": "../players/satyaki_das.jpg" }
+    ],
+    "C": [
+      { "id": "c1", "name": "Arindam Rakshit", "position": "ST", "basePrice": 300000, "img": "../players/arindam_rakshit.jpg" },
+      { "id": "c2", "name": "Aritra Adhikari", "position": "CM", "basePrice": 300000, "img": "../players/aritra_adhikari.jpg" },
+      { "id": "c3", "name": "Arkadip Rath", "position": "CD", "basePrice": 300000, "img": "../players/arkadip_rath.jpg" },
+      { "id": "c4", "name": "Prashnik Dey", "position": "ST", "basePrice": 300000, "img": "../players/prashnik_dey.jpg" },
+      { "id": "c5", "name": "Reet Karmakar", "position": "CM", "basePrice": 300000, "img": "../players/reet_karmakar.jpg" },
+      { "id": "c6", "name": "Sourav Acharjee", "position": "CD", "basePrice": 300000, "img": "../players/sourav_acharjee.jpg" },
+      { "id": "c7", "name": "Subhayan Banerjee", "position": "CD", "basePrice": 300000, "img": "../players/subhayan_banerjee.jpg" },
+      { "id": "c8", "name": "Subhojit Manna (Bony)", "position": "CD", "basePrice": 300000, "img": "../players/subhojit_manna.jpg" }
+    ]
+  }
+}
