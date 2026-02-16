@@ -36,8 +36,8 @@ function nextPlayer() {
     cancelTimer();
   }
 
-  const pool = state.pools[state.category];
-  const skipped = state.skipped[state.category];
+  const pool = state.pools[state.category] || [];
+  const skipped = state.skipped[state.category] || [];
   const merged = [...pool, ...skipped];
 
   if (merged.length === 0) {
