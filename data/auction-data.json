@@ -6,8 +6,12 @@
     { "name": "Sankhaneel Roychowdhury", "budget": 3000000 },
     { "name": "Subhamoy Das", "budget": 3000000 },
     { "name": "Thomas Joseph", "budget": 3000000 },
+    { "name": "Yash Agarwal", "budget": 3000000 },
+    { "name": "Subhamoy Das", "budget": 3000000 },
+    { "name": "Thomas Joseph", "budget": 3000000 },
     { "name": "Yash Agarwal", "budget": 3000000 }
   ],
+  
   "players": {
     "X": [
       { "id": "x1", "name": "Salim Rahaman", "position": "PL", "basePrice": 600000, "img": "./players/salim_raha​​man.jpg" },
