@@ -15,10 +15,14 @@ async function loadAuctionData() {
 
     const data = await response.json();
 
-    // Initialize base auction state
-    state.pools = data.pools || {};
-    state.teams = data.teams || [];
-    state.category = data.category || null;
+    // Inject players into existing pools
+    if (data.players) {
+      Object.keys(data.players).forEach(cat => {
+        state.pools[cat] = data.players[cat];
+      });
+    }
+    
+    state.teams = data.captains || [];
 
     // Reset runtime values
     state.sales = [];
