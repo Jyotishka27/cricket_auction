@@ -274,3 +274,35 @@ function updateButtonStates() {
   dom.btnSkip.disabled = disable;
   dom.btnSell.disabled = !state.current || state.current.bidder === null;
 }
+
+// ===============================
+// Wire Initial DOM Events
+// ===============================
+function wireEvents() {
+
+  // Category buttons
+  dom.catButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setCategory(btn.dataset.cat);
+    });
+  });
+
+  // Core buttons
+  dom.btnNext.addEventListener('click', nextPlayer);
+  dom.btnSkip.addEventListener('click', skipPlayer);
+  dom.btnSell.addEventListener('click', sell);
+
+  // Toggle results
+  dom.btnToggleResults.addEventListener('click', () => {
+    const hidden = dom.btnToggleResults.dataset.hidden === '1';
+    dom.btnToggleResults.dataset.hidden = hidden ? '0' : '1';
+    renderResults();
+  });
+
+  // Bid step change should re-render bid buttons
+  dom.bidStepInput.addEventListener('input', () => {
+    renderBidButtons();
+  });
+
+}
+
