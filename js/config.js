@@ -1,9 +1,8 @@
 const CATEGORY_LABELS = {
-  X: 'Goalkeepers (₹4L)',
-  P: 'Prime (₹6L)',
-  A: 'Elite (₹5L)',
-  B: 'Core (₹4L)',
-  C: 'Developing (₹3L)',
+  X: 'Elite (₹6L)',
+  P: 'Prime (₹5L)',
+  A: 'Core (₹4L)',
+  B: 'Developing (₹3L)',
   UNSOLD: 'UnSold'
 };
 
