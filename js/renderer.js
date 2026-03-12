@@ -330,11 +330,13 @@ function wireEvents() {
     await loadAuctionData();
   
     renderAll();
-
+  
+  });
+  
   // Bid step change should re-render bid buttons
   dom.bidStepInput.addEventListener('input', () => {
     renderBidButtons();
   });
-
-}
+  
+  }
 
