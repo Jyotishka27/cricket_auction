@@ -23,6 +23,10 @@ const dom = {
   btnSkip: document.getElementById('btnSkip'),
   btnSell: document.getElementById('btnSell'),
   btnToggleResults: document.getElementById('btnToggleResults'),
+  btnSaveState: document.getElementById('btnSaveState'),
+  btnExportCSV: document.getElementById('btnExportCSV'),
+  btnResetAll: document.getElementById('btnResetAll'),
+  fileLoadState: document.getElementById('fileLoadState'),
   catButtons: document.querySelectorAll('.catBtn'),
   bidStepInput: document.getElementById('bidStep')
 };
@@ -298,6 +302,34 @@ function wireEvents() {
     dom.btnToggleResults.dataset.hidden = hidden ? '0' : '1';
     renderResults();
   });
+
+  // Save state
+  dom.btnSaveState.addEventListener('click', () => {
+    saveState();
+  });
+  
+  // Export CSV
+  dom.btnExportCSV.addEventListener('click', () => {
+    exportCSV();
+  });
+  
+  // Load state
+  dom.fileLoadState.addEventListener('change', (e) => {
+    loadState(e.target.files);
+  });
+  
+  // Reset auction
+  dom.btnResetAll.addEventListener('click', async () => {
+  
+    if (!confirm('Reset the entire auction? This cannot be undone.')) return;
+  
+    cancelTimer();
+  
+    localStorage.removeItem(AUTOSAVE_KEY);
+  
+    await loadAuctionData();
+  
+    renderAll();
 
   // Bid step change should re-render bid buttons
   dom.bidStepInput.addEventListener('input', () => {
