@@ -1,7 +1,3 @@
-// ===============================
-// renderer.js
-// ===============================
-
 // -- Cached DOM elements --
 const dom = {
   teamsTable: document.getElementById('teamsTable'),
