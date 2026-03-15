@@ -20,22 +20,22 @@
   
   "players": {
     "X": [
-      { "id": "x1", "name": "Mr. S Murali Krishnan", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x2", "name": "Mr. Rajib Kumar Biswas", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x3", "name": "Mr. Subhajit Saha", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x4", "name": "Mr. Jahar Bagchi", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x5", "name": "Mr. Anindya Dutta", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x6", "name": "Mr. Rajat Kumar Singh", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x7", "name": "Mr. Niladri Das", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x8", "name": "Mr. Utpal Panda", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x9", "name": "Mr. Ayush Gupta", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x10", "name": "Mr. Kailash Nath Ghosh", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x11", "name": "Mr. Sujit Kumar Das", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x12", "name": "Mr. Arup Sunder Paul", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x13", "name": "Mr. Soumitra Majumdar", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x14", "name": "Mr. Manibrata Paul", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x15", "name": "Mr. Amitava Chatterjee", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" },
-      { "id": "x16", "name": "Mr. Krishna Kumar Kunwar", "position": "PL", "basePrice": 50000, "img": "./players/default.jpg" }
+      { "id": "x1", "name": "Mr. S Murali Krishnan", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x2", "name": "Mr. Rajib Kumar Biswas", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x3", "name": "Mr. Subhajit Saha", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x4", "name": "Mr. Jahar Bagchi", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x5", "name": "Mr. Anindya Dutta", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x6", "name": "Mr. Rajat Kumar Singh", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x7", "name": "Mr. Niladri Das", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x8", "name": "Mr. Utpal Panda", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x9", "name": "Mr. Ayush Gupta", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x10", "name": "Mr. Kailash Nath Ghosh", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x11", "name": "Mr. Sujit Kumar Das", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x12", "name": "Mr. Arup Sunder Paul", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x13", "name": "Mr. Soumitra Majumdar", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x14", "name": "Mr. Manibrata Paul", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x15", "name": "Mr. Amitava Chatterjee", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x16", "name": "Mr. Krishna Kumar Kunwar", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" }
       ],
     
     "P": [
