@@ -1,21 +1,21 @@
 {
   "captains": [
-    { "name": "RT SPORTS", "budget": 350000 },
-    { "name": "HEAD HUNTERS HOWRAH", "budget": 350000 },
-    { "name": "KSG & ASSOCIATES", "budget": 350000 },
-    { "name": "SUCCESS STRIKER", "budget": 350000 },
-    { "name": "CECON INDUSTRIES", "budget": 350000 },
-    { "name": "DALHOUSIE DYNAMITES", "budget": 350000 },
-    { "name": "RAJA CONSTRUCTION", "budget": 350000 },
-    { "name": "DGM SUPER CHALLENGER", "budget": 350000 },
-    { "name": "SHANTI SEA VIEW", "budget": 350000 },
-    { "name": "RED FIGHTER", "budget": 350000 },
-    { "name": "KKI", "budget": 350000 },
-    { "name": "MACARAV", "budget": 350000 },
-    { "name": "BAGULA YOUTH CLUB (BYC)", "budget": 350000 },
-    { "name": "BASUNDHARA BLASTERS", "budget": 350000 },
-    { "name": "PRESIDENT 26", "budget": 350000 },
-    { "name": "3S BANDO PVT LTD.", "budget": 350000 }
+    { "name": "RT SPORTS", "budget": 300000 },
+    { "name": "HEAD HUNTERS HOWRAH", "budget": 300000 },
+    { "name": "KSG & ASSOCIATES", "budget": 300000 },
+    { "name": "SUCCESS STRIKER", "budget": 300000 },
+    { "name": "CECON INDUSTRIES", "budget": 300000 },
+    { "name": "DALHOUSIE DYNAMITES", "budget": 300000 },
+    { "name": "RAJA CONSTRUCTION", "budget": 300000 },
+    { "name": "DGM SUPER CHALLENGER", "budget": 300000 },
+    { "name": "SHANTI SEA VIEW", "budget": 300000 },
+    { "name": "RED FIGHTER", "budget": 300000 },
+    { "name": "KKI", "budget": 300000 },
+    { "name": "MACARAV", "budget": 300000 },
+    { "name": "BAGULA YOUTH CLUB (BYC)", "budget": 300000 },
+    { "name": "BASUNDHARA BLASTERS", "budget": 300000 },
+    { "name": "PRESIDENT 26", "budget": 300000 },
+    { "name": "3S BANDO PVT LTD.", "budget": 300000 }
   ],
   
   "players": {
