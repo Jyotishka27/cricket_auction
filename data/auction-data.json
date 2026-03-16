@@ -35,7 +35,8 @@
       { "id": "x13", "name": "Mr. Soumitra Majumdar", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
       { "id": "x14", "name": "Mr. Manibrata Paul", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
       { "id": "x15", "name": "Mr. Amitava Chatterjee", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
-      { "id": "x16", "name": "Mr. Krishna Kumar Kunwar", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" }
+      { "id": "x16", "name": "Mr. Krishna Kumar Kunwar", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" },
+      { "id": "x17", "name": "Mr. Tapan Chaki", "position": "PL", "basePrice": 50000, "img": "./players/defaultimage.png" }
       ],
     
     "P": [
@@ -53,7 +54,9 @@
       { "id": "p12", "name": "Mr. Saibal Sengupta", "position": "PL", "basePrice": 40000, "img": "./players/defaultimage.png" },
       { "id": "p13", "name": "Mr. Santanu Kar", "position": "PL", "basePrice": 40000, "img": "./players/defaultimage.png" },
       { "id": "p14", "name": "Mr. Pranab Sarkar", "position": "PL", "basePrice": 40000, "img": "./players/defaultimage.png" },
-      { "id": "p15", "name": "Mr. Amalendu Sekhar Roy", "position": "PL", "basePrice": 40000, "img": "./players/defaultimage.png" }
+      { "id": "p15", "name": "Mr. Amalendu Sekhar Roy", "position": "PL", "basePrice": 40000, "img": "./players/defaultimage.png" },
+      { "id": "p16", "name": "Mr. Gaurav Agarwal", "position": "PL", "basePrice": 40000, "img": "./players/defaultimage.png" },
+      { "id": "p17", "name": "Mr. Asim Banerjee", "position": "PL", "basePrice": 40000, "img": "./players/defaultimage.png" }
     ],
 
    "A": [
@@ -71,7 +74,8 @@
       { "id": "a12", "name": "Mr. Prodip Koley", "position": "PL", "basePrice": 30000, "img": "./players/defaultimage.png" },
       { "id": "a13", "name": "Mr. Raj Das", "position": "PL", "basePrice": 30000, "img": "./players/defaultimage.png" },
       { "id": "a14", "name": "Mr. Debasish Mullick", "position": "PL", "basePrice": 30000, "img": "./players/defaultimage.png" },
-      { "id": "a15", "name": "Mr. Anup Kumar Paul", "position": "PL", "basePrice": 30000, "img": "./players/defaultimage.png" }
+      { "id": "a15", "name": "Mr. Anup Kumar Paul", "position": "PL", "basePrice": 30000, "img": "./players/defaultimage.png" },
+      { "id": "a16", "name": "Mr. Tithankar Das", "position": "PL", "basePrice": 30000, "img": "./players/defaultimage.png" }
     ],
     
   "B": [
@@ -89,7 +93,8 @@
       { "id": "b12", "name": "Mr. B D Agarwal", "position": "PL", "basePrice": 20000, "img": "./players/defaultimage.png" },
       { "id": "b13", "name": "Mr. Sarwesh Bhiwaniwala", "position": "PL", "basePrice": 20000, "img": "./players/defaultimage.png" },
       { "id": "b14", "name": "Mr. Abhishek Chakraborty", "position": "PL", "basePrice": 20000, "img": "./players/defaultimage.png" },
-      { "id": "b15", "name": "Mr. Sarbajit Barick", "position": "PL", "basePrice": 20000, "img": "./players/defaultimage.png" }
+      { "id": "b15", "name": "Mr. Sarbajit Barick", "position": "PL", "basePrice": 20000, "img": "./players/defaultimage.png" },
+      { "id": "b16", "name": "Mr. Salil Mukherjee", "position": "PL", "basePrice": 20000, "img": "./players/defaultimage.png" }
     ]
   }
 }
