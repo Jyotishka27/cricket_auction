@@ -88,24 +88,6 @@ function skipPlayer() {
 }
 
 // ===============================
-// Cancel auction
-// ===============================
-function cancelAuction() {
-  if (!state.current) {
-    alert('No active player.');
-    return;
-  }
-
-  cancelTimer();
-
-  // Reset bid to base price
-  state.current.bid = state.current.player.basePrice;
-  state.current.bidder = null;
-
-  renderCurrent();
-}
-
-// ===============================
 // Bidding
 // ===============================
 function placeBid(teamIndex) {
