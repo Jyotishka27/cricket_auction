@@ -88,6 +88,15 @@ function skipPlayer() {
 }
 
 // ===============================
+// Cancel auction
+// ===============================
+function cancelAuction() {
+  if (!state.current) return;
+
+  cancelTimer(); // just stop timer
+}
+
+// ===============================
 // Bidding
 // ===============================
 function placeBid(teamIndex) {
