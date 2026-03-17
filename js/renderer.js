@@ -237,7 +237,6 @@ function renderCurrent() {
 
   renderBidButtons();
   updateButtonStates();
-  clearWarn();
 }
 
 // ===============================
