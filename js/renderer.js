@@ -18,7 +18,6 @@ const dom = {
   btnNext: document.getElementById('btnNext'),
   btnSkip: document.getElementById('btnSkip'),
   btnSell: document.getElementById('btnSell'),
-  btnCancel: document.getElementById('btnCancel'),
   btnToggleResults: document.getElementById('btnToggleResults'),
   btnSaveState: document.getElementById('btnSaveState'),
   btnExportCSV: document.getElementById('btnExportCSV'),
@@ -291,7 +290,6 @@ function wireEvents() {
   dom.btnNext.addEventListener('click', nextPlayer);
   dom.btnSkip.addEventListener('click', skipPlayer);
   dom.btnSell.addEventListener('click', sell);
-  dom.btnCancel.addEventListener('click', cancelAuction);
 
   // Toggle results
   dom.btnToggleResults.addEventListener('click', () => {
