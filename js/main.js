@@ -3,8 +3,12 @@
 
   let restored = false;
 
-  if (window.loadAuctionFromCloud) {
-    restored = await window.loadAuctionFromCloud();
+  try {
+    if (window.loadAuctionFromCloud) {
+      restored = await window.loadAuctionFromCloud();
+    }
+  } catch (err) {
+    console.warn('Cloud restore skipped:', err);
   }
 
   if (!restored) {
