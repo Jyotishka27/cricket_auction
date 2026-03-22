@@ -599,6 +599,7 @@ function renderRemain() {
 function renderCurrent() {
   if (!state.current) {
     dom.currentPlayerCard.hidden = true;
+    if (dom.currentBidderName) dom.currentBidderName.textContent = '—';
     return;
   }
 
@@ -619,6 +620,14 @@ function renderCurrent() {
   dom.playerBase.textContent = `₹ ${fmt(player.basePrice)}`;
   dom.currentBid.value = bid;
 
+  if (dom.currentBidderName) {
+    if (state.current.bidder === null) {
+      dom.currentBidderName.textContent = '—';
+    } else {
+      dom.currentBidderName.textContent = state.teams[state.current.bidder]?.name || '—';
+    }
+  }
+  
   if (state.timer.running) {
     dom.countdown.textContent = `${state.timer.left}s`;
     dom.countdown.classList.toggle('blink', state.timer.left <= 10);
@@ -646,7 +655,9 @@ function renderBidButtons() {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className =
-      'px-2 py-1 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 text-xs';
+      i === state.current.bidder
+        ? 'px-2 py-1 rounded-xl bg-emerald-600 text-white text-xs'
+        : 'px-2 py-1 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 text-xs';
     btn.textContent = team.name;
 
     const nextBid = hasBidder ? currentBid + step : currentBid;
