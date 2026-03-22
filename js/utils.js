@@ -13,3 +13,8 @@ function applyUnsoldReduction(player) {
     MIN_PRICE
   );
 }
+
+function showWarn(message) {
+  if (!dom || !dom.warn) return;
+  dom.warn.textContent = message || '';
+}
