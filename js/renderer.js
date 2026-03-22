@@ -4,8 +4,12 @@ const dom = {
   results: document.getElementById('results'),
   tabBudgets: document.getElementById('tabBudgets'),
   tabResults: document.getElementById('tabResults'),
+  tabPlayerManagement: document.getElementById('tabPlayerManagement'),
   budgetsTabContent: document.getElementById('budgetsTabContent'),
   resultsTabContent: document.getElementById('resultsTabContent'),
+  playerManagementTabContent: document.getElementById('playerManagementTabContent'),
+  playerManagementPools: document.getElementById('playerManagementPools'),
+  btnTogglePlayerManagementEdit: document.getElementById('btnTogglePlayerManagementEdit'),
   remainCat: document.getElementById('remainCat'),
   remainCount: document.getElementById('remainCount'),
   remainList: document.getElementById('remainList'),
@@ -38,32 +42,108 @@ function renderAll() {
   renderResults();
   renderRemain();
   renderCurrent();
+  renderPlayerManagement();
   highlightCat();
   renderRightPanelTabs();
 }
 
-function renderRightPanelTabs() {
-  const activeTab = state.ui.rightPanelTab;
+function renderPlayerManagement() {
+  if (!dom.playerManagementPools) return;
 
-  if (activeTab === 'budgets') {
-    dom.budgetsTabContent.classList.remove('hidden');
-    dom.resultsTabContent.classList.add('hidden');
+  const categories = [
+    { key: 'X', label: 'Elite' },
+    { key: 'P', label: 'Prime' },
+    { key: 'A', label: 'Core' },
+    { key: 'B', label: 'Developing' },
+    { key: 'UNSOLD', label: 'UnSold' }
+  ];
 
-    dom.tabBudgets.classList.add('bg-slate-900', 'text-white');
-    dom.tabBudgets.classList.remove('bg-slate-100', 'text-slate-700');
+  dom.playerManagementPools.innerHTML = '';
 
-    dom.tabResults.classList.add('bg-slate-100', 'text-slate-700');
-    dom.tabResults.classList.remove('bg-slate-900', 'text-white');
-  } else {
-    dom.budgetsTabContent.classList.add('hidden');
-    dom.resultsTabContent.classList.remove('hidden');
-
-    dom.tabResults.classList.add('bg-slate-900', 'text-white');
-    dom.tabResults.classList.remove('bg-slate-100', 'text-slate-700');
-
-    dom.tabBudgets.classList.add('bg-slate-100', 'text-slate-700');
-    dom.tabBudgets.classList.remove('bg-slate-900', 'text-white');
+  if (dom.btnTogglePlayerManagementEdit) {
+    dom.btnTogglePlayerManagementEdit.textContent = state.ui.playerManagementEditMode
+      ? 'Disable Edit Mode'
+      : 'Enable Edit Mode';
   }
+
+  categories.forEach(({ key, label }) => {
+    const players = [
+      ...(state.pools[key] || []),
+      ...(state.skipped[key] || [])
+    ];
+
+    const section = document.createElement('div');
+    section.className = 'rounded-xl border border-slate-200 p-3';
+
+    section.innerHTML = `
+      <div class="flex items-center justify-between mb-2">
+        <h4 class="font-semibold">${label}</h4>
+        <span class="text-sm text-slate-500">${players.length} players</span>
+      </div>
+      <div class="grid gap-2" id="pool-${key}"></div>
+    `;
+
+    dom.playerManagementPools.appendChild(section);
+
+    const poolContainer = section.querySelector(`#pool-${key}`);
+
+    if (players.length === 0) {
+      poolContainer.innerHTML = `<div class="text-sm text-slate-500">No players</div>`;
+      return;
+    }
+
+    players.forEach((player) => {
+      const card = document.createElement('div');
+      card.className = 'rounded-lg border border-slate-200 p-2 bg-slate-50';
+
+      card.innerHTML = `
+        <div class="font-medium">${player.name}</div>
+        <div class="text-xs text-slate-500 mb-2">
+          ${player.position || 'N/A'} • ₹ ${fmt(player.basePrice)}
+        </div>
+        ${
+          state.ui.playerManagementEditMode
+            ? `
+              <div class="flex items-center gap-2 flex-wrap">
+                <select data-move-player="${player.id}" class="border rounded-lg px-2 py-1 text-sm">
+                  <option value="">Move to...</option>
+                  <option value="X">Elite</option>
+                  <option value="P">Prime</option>
+                  <option value="A">Core</option>
+                  <option value="B">Developing</option>
+                  <option value="UNSOLD">UnSold</option>
+                </select>
+                <button
+                  data-move-player-btn="${player.id}"
+                  data-from-category="${key}"
+                  class="px-2 py-1 rounded-lg bg-slate-900 text-white text-sm"
+                >
+                  Move
+                </button>
+              </div>
+            `
+            : ''
+        }
+      `;
+
+      poolContainer.appendChild(card);
+
+      if (state.ui.playerManagementEditMode) {
+        const select = card.querySelector(`[data-move-player="${player.id}"]`);
+        const button = card.querySelector(`[data-move-player-btn="${player.id}"]`);
+
+        button.addEventListener('click', () => {
+          const targetCategory = select.value;
+          if (!targetCategory) {
+            alert('Please select a target pool.');
+            return;
+          }
+
+          movePlayer(player.id, key, targetCategory);
+        });
+      }
+    });
+  });
 }
 
 // ===============================
@@ -324,7 +404,15 @@ function wireEvents() {
 
   dom.tabResults.addEventListener('click', () => {
     setRightPanelTab('results');
+  });
+  
+  dom.tabPlayerManagement.addEventListener('click', () => {
+    setRightPanelTab('playerManagement');
+  });
 
+  dom.btnTogglePlayerManagementEdit.addEventListener('click', () => {
+    state.ui.playerManagementEditMode = !state.ui.playerManagementEditMode;
+    renderPlayerManagement();
   });
 
   // Save state
