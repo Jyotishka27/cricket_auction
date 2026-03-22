@@ -7,6 +7,8 @@ const state = {
   sales: [],
   timer: { handle: null, left: 0, running: false },
   ui: {
+    activeMainTab: 'auction',
+    activeAdminTab: 'budgets',
     rightPanelTab: 'budgets',
     playerManagementEditMode: false
   }
