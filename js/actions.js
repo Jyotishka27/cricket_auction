@@ -18,6 +18,11 @@ function setCategory(cat) {
   renderAll();
 }
 
+function setRightPanelTab(tabName) {
+  state.ui.rightPanelTab = tabName;
+  renderAll();
+}
+
 // ===============================
 // Player selection
 // ===============================
