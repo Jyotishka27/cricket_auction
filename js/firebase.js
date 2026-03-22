@@ -1,11 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-analytics.js";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB_99fBDK1AD2qhoPsE2JIxsEvryYS3bg8",
@@ -18,15 +12,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
-// Analytics is optional. Keep it only if you want it.
-let analytics = null;
-try {
-  analytics = getAnalytics(app);
-} catch (err) {
-  console.warn("Analytics not available in this environment:", err);
-}
-
 const db = getFirestore(app);
 const AUCTION_DOC = doc(db, "auctions", "default_auction");
 
@@ -89,6 +74,5 @@ async function loadAuctionFromCloud() {
   }
 }
 
-// expose globally for your existing non-module files
 window.saveAuctionToCloud = saveAuctionToCloud;
 window.loadAuctionFromCloud = loadAuctionFromCloud;
