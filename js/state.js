@@ -5,5 +5,8 @@ const state = {
   current: null,
   teams: [],
   sales: [],
-  timer: { handle: null, left: 0, running: false }
+  timer: { handle: null, left: 0, running: false },
+  ui: {
+    rightPanelTab: 'budgets'
+  }
 };
