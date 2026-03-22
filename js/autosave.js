@@ -1,4 +1,4 @@
-var AUTOSAVE_KEY = 'cricket_auction_autosave';
+// use the global AUTOSAVE_KEY from config.js
 
 function autoSaveState() {
   const payload = {
