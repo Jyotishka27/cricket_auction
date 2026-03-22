@@ -53,6 +53,7 @@ const dom = {
   playerPosition: document.getElementById('playerPosition'),
   playerBase: document.getElementById('playerBase'),
   currentBid: document.getElementById('currentBid'),
+  currentBidderName: document.getElementById('currentBidderName'),
   countdown: document.getElementById('countdown'),
   warn: document.getElementById('warn'),
   bidTeamsContainer: document.getElementById('bidTeamsContainer'),
