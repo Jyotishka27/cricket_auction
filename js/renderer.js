@@ -661,7 +661,12 @@ function renderBidButtons() {
     btn.textContent = team.name;
 
     const nextBid = hasBidder ? currentBid + step : currentBid;
-    if (nextBid > team.budget) btn.disabled = true;
+    const isCurrentBidder = i === state.current.bidder;
+    const cannotAfford = nextBid > team.budget;
+    
+    if (isCurrentBidder || cannotAfford) {
+      btn.disabled = true;
+    }
 
     btn.addEventListener('click', () => placeBid(i));
     dom.bidTeamsContainer.appendChild(btn);
