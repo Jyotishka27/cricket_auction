@@ -1,8 +1,18 @@
 (async function initAuction() {
   await loadAuctionData();
 
-  const restored = restoreAutoSavedState();
+  let restored = false;
+
+  if (window.loadAuctionFromCloud) {
+    restored = await window.loadAuctionFromCloud();
+  }
+
+  if (!restored) {
+    restoreAutoSavedState();
+  }
 
   wireEvents();
   renderAll();
+
+  window.addEventListener('beforeunload', autoSaveState);
 })();
