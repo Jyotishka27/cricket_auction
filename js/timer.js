@@ -24,6 +24,7 @@ function startOrResetTimer() {
   }
 
   updateButtonStates();
+  autoSaveState();
 }
 
 // -------------------------------
@@ -40,6 +41,7 @@ function cancelTimer() {
     running: false
   };
 
+  autoSaveState();
   updateButtonStates();
   renderCurrent();
 }
