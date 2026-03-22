@@ -89,10 +89,6 @@ img[alt="player"] {
 /* -------------------------------
    Disabled buttons
 -------------------------------- */
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
 
 #bidTeamsContainer button.bg-emerald-600:disabled {
   opacity: 1;
