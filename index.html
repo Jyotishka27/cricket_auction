@@ -38,121 +38,176 @@
 
 <!-- ================= MAIN ================= -->
 
-<main class="max-w-7xl mx-auto p-4 grid lg:grid-cols-3 gap-4">
+<main class="max-w-7xl mx-auto p-4 space-y-4">
 
-  <!-- LEFT SIDE -->
-  <section class="lg:col-span-2 space-y-4">
+  <!-- TOP LEVEL TABS -->
+  <div class="bg-white rounded-2xl border border-slate-200 p-3">
+    <div class="flex items-center gap-2 flex-wrap">
+      <button
+        id="tabAuctionView"
+        class="px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-medium"
+      >
+        Auction
+      </button>
+      <button
+        id="tabAdminView"
+        class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium hover:bg-slate-200"
+      >
+        Admin
+      </button>
+    </div>
+  </div>
 
-    <!-- Category Controls -->
-    <div class="bg-white rounded-2xl border border-slate-200 p-4">
-      <div class="flex items-center justify-between flex-wrap gap-3">
+  <!-- AUCTION VIEW -->
+  <div id="auctionView">
+    <div class="grid lg:grid-cols-3 gap-4">
 
-        <div class="flex items-center gap-2">
-          <span class="text-sm text-slate-600">Category:</span>
-          <div class="inline-flex rounded-xl overflow-hidden border border-slate-200">
-            <button data-cat="X" class="catBtn px-3 py-1.5 text-sm hover:bg-slate-100">Elite</button>
-            <button data-cat="P" class="catBtn px-3 py-1.5 text-sm hover:bg-slate-100">Prime</button>
-            <button data-cat="A" class="catBtn px-3 py-1.5 text-sm hover:bg-slate-100">Core</button>
-            <button data-cat="B" class="catBtn px-3 py-1.5 text-sm hover:bg-slate-100">Developing</button>
-            <button data-cat="UNSOLD" class="catBtn px-3 py-1.5 text-sm hover:bg-slate-100">UnSold</button>
+      <!-- LEFT SIDE -->
+      <section class="lg:col-span-2 space-y-4">
+
+        <!-- Category Controls -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-slate-600">Category:</span>
+              <div class="inline-flex rounded-xl overflow-hidden border border-slate-200">
+                <button data-cat="X" class="catBtn px-3 py-1.5 text-sm hover:bg-slate-100">Elite</button>
+                <button data-cat="P" class="catBtn px-3 py-1.5 text-sm hover:bg-slate-100">Prime</button>
+                <button data-cat="A" class="catBtn px-3 py-1.5 text-sm hover:bg-slate-100">Core</button>
+                <button data-cat="B" class="catBtn px-3 py-1.5 text-sm hover:bg-slate-100">Developing</button>
+                <button data-cat="UNSOLD" class="catBtn px-3 py-1.5 text-sm hover:bg-slate-100">UnSold</button>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button id="btnNext" class="px-3 py-1.5 rounded-xl bg-blue-600 text-white">Next Player</button>
+              <button id="btnSkip" class="px-3 py-1.5 rounded-xl border border-slate-300">Skip</button>
+              <button id="btnUndo" class="px-3 py-1.5 rounded-xl border border-amber-300 text-amber-700">Undo</button>
+            </div>
+
           </div>
         </div>
 
-        <div class="flex items-center gap-2">
-          <button id="btnNext" class="px-3 py-1.5 rounded-xl bg-blue-600 text-white">Next Player</button>
-          <button id="btnSkip" class="px-3 py-1.5 rounded-xl border border-slate-300">Skip</button>
-          <button id="btnUndo" class="px-3 py-1.5 rounded-xl border border-amber-300 text-amber-700">Undo</button>
+        <!-- Current Player -->
+        <div id="currentPlayerCard" class="bg-white rounded-2xl border border-slate-200 p-4 grid md:grid-cols-3 gap-4" hidden>
+
+          <div>
+            <img id="playerImg" class="w-full h-56 rounded-xl border bg-slate-100" />
+          </div>
+
+          <div class="md:col-span-2 space-y-3">
+            <h2 id="playerName" class="text-xl font-bold">—</h2>
+            <p>Category: <span id="playerCat">—</span></p>
+            <p>Position: <span id="playerPosition">—</span></p>
+            <p>Base Price: <span id="playerBase">—</span></p>
+
+            <div>
+              <label class="text-sm">Bid Increment</label>
+              <input id="bidStep" type="number" value="25000" class="w-full border rounded-xl mt-1 p-1" />
+            </div>
+
+            <div>
+              <label class="text-sm">Current Bid</label>
+              <input id="currentBid" type="number" readonly class="w-full border rounded-xl mt-1 p-1" />
+            </div>
+
+            <div id="bidTeamsContainer" class="grid grid-cols-3 gap-2"></div>
+
+            <div class="flex items-center gap-3">
+              <button id="btnSell" class="px-3 py-2 rounded-xl bg-emerald-600 text-white">Sell</button>
+              <span>Timer: <span id="countdown">—</span></span>
+              <button id="btnCancelTimer" class="px-2 py-1 border rounded-lg text-xs">Cancel</button>
+            </div>
+
+            <div id="warn" class="text-rose-600 text-sm"></div>
+          </div>
+
         </div>
 
-      </div>
+        <!-- Remaining -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4">
+          <h3 class="font-semibold mb-2">
+            Remaining in Category <span id="remainCat">—</span> (<span id="remainCount">0</span>)
+          </h3>
+          <div id="remainList" class="grid sm:grid-cols-2 md:grid-cols-3 gap-2"></div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT SIDE -->
+      <aside class="space-y-4">
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-4">
+          <div class="flex items-center gap-2 mb-4 flex-wrap">
+            <button
+              id="tabBudgets"
+              class="px-3 py-1.5 rounded-xl bg-slate-900 text-white text-sm font-medium"
+            >
+              Team Budgets
+            </button>
+            <button
+              id="tabResults"
+              class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium hover:bg-slate-200"
+            >
+              Results
+            </button>
+          </div>
+
+          <div id="budgetsTabContent">
+            <h3 class="font-semibold mb-2">Team Budgets</h3>
+            <div id="teamsTable" class="divide-y"></div>
+          </div>
+
+          <div id="resultsTabContent" class="hidden">
+            <h3 class="font-semibold mb-2">Results</h3>
+            <div id="results" class="mt-3 space-y-3"></div>
+          </div>
+        </div>
+
+      </aside>
     </div>
+  </div>
 
-    <!-- Current Player -->
-    <div id="currentPlayerCard" class="bg-white rounded-2xl border border-slate-200 p-4 grid md:grid-cols-3 gap-4" hidden>
+  <!-- ADMIN VIEW -->
+  <div id="adminView" class="hidden space-y-4">
 
-      <div>
-        <img id="playerImg" class="w-full h-56 rounded-xl border bg-slate-100" />
-      </div>
-
-      <div class="md:col-span-2 space-y-3">
-        <h2 id="playerName" class="text-xl font-bold">—</h2>
-        <p>Category: <span id="playerCat">—</span></p>
-        <p>Position: <span id="playerPosition">—</span></p>
-        <p>Base Price: <span id="playerBase">—</span></p>
-
-        <div>
-          <label class="text-sm">Bid Increment</label>
-          <input id="bidStep" type="number" value="25000" class="w-full border rounded-xl mt-1 p-1" />
-        </div>
-
-        <div>
-          <label class="text-sm">Current Bid</label>
-          <input id="currentBid" type="number" readonly class="w-full border rounded-xl mt-1 p-1" />
-        </div>
-
-        <div id="bidTeamsContainer" class="grid grid-cols-3 gap-2"></div>
-
-        <div class="flex items-center gap-3">
-          <button id="btnSell" class="px-3 py-2 rounded-xl bg-emerald-600 text-white">Sell</button>
-          <span>Timer: <span id="countdown">—</span></span>
-          <button id="btnCancelTimer" class="px-2 py-1 border rounded-lg text-xs">Cancel</button>
-        </div>
-
-        <div id="warn" class="text-rose-600 text-sm"></div>
-      </div>
-
-    </div>
-
-    <!-- Remaining -->
     <div class="bg-white rounded-2xl border border-slate-200 p-4">
-      <h3 class="font-semibold mb-2">
-        Remaining in Category <span id="remainCat">—</span> (<span id="remainCount">0</span>)
-      </h3>
-      <div id="remainList" class="grid sm:grid-cols-2 md:grid-cols-3 gap-2"></div>
-    </div>
-
-  </section>
-
-  <!-- RIGHT SIDE -->
-  <aside class="space-y-4">
-
-    <div class="bg-white rounded-2xl border border-slate-200 p-4">
-      <!-- Tabs -->
       <div class="flex items-center gap-2 mb-4 flex-wrap">
         <button
-          id="tabBudgets"
+          id="tabAdminBudgets"
           class="px-3 py-1.5 rounded-xl bg-slate-900 text-white text-sm font-medium"
         >
           Team Budgets
         </button>
         <button
-          id="tabResults"
+          id="tabAdminResults"
           class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium hover:bg-slate-200"
         >
           Results
         </button>
         <button
-          id="tabPlayerManagement"
+          id="tabAdminPlayerManagement"
           class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium hover:bg-slate-200"
         >
           Player Management
         </button>
       </div>
 
-      <!-- Budgets Tab Content -->
-      <div id="budgetsTabContent">
+      <!-- Admin Budgets -->
+      <div id="adminBudgetsTabContent">
         <h3 class="font-semibold mb-2">Team Budgets</h3>
-        <div id="teamsTable" class="divide-y"></div>
+        <div id="adminTeamsTable" class="divide-y"></div>
       </div>
 
-      <!-- Results Tab Content -->
-      <div id="resultsTabContent" class="hidden">
+      <!-- Admin Results -->
+      <div id="adminResultsTabContent" class="hidden">
         <h3 class="font-semibold mb-2">Results</h3>
-        <div id="results" class="mt-3 space-y-3"></div>
+        <div id="adminResults" class="mt-3 space-y-3"></div>
       </div>
 
-      <!-- Player Management Tab Content -->
-      <div id="playerManagementTabContent" class="hidden">
+      <!-- Admin Player Management -->
+      <div id="adminPlayerManagementTabContent" class="hidden">
         <div class="flex items-center justify-between mb-3">
           <h3 class="font-semibold">Player Management</h3>
           <button
@@ -163,12 +218,12 @@
           </button>
         </div>
 
-        <div id="playerManagementPools" class="space-y-4"></div>
+        <div id="playerManagementPools" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
       </div>
     </div>
 
-  </aside>
-  
+  </div>
+
 </main>
 
 <!-- ================= SCRIPTS ================= -->
