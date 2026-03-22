@@ -1,15 +1,38 @@
 // -- Cached DOM elements --
 const dom = {
-  teamsTable: document.getElementById('teamsTable'),
-  results: document.getElementById('results'),
+  // Auction view
+  auctionView: document.getElementById('auctionView'),
+  adminView: document.getElementById('adminView'),
+
+  // Top-level tabs
+  tabAuctionView: document.getElementById('tabAuctionView'),
+  tabAdminView: document.getElementById('tabAdminView'),
+
+  // Auction right-side tabs
   tabBudgets: document.getElementById('tabBudgets'),
   tabResults: document.getElementById('tabResults'),
-  tabPlayerManagement: document.getElementById('tabPlayerManagement'),
   budgetsTabContent: document.getElementById('budgetsTabContent'),
   resultsTabContent: document.getElementById('resultsTabContent'),
-  playerManagementTabContent: document.getElementById('playerManagementTabContent'),
+
+  // Auction data areas
+  teamsTable: document.getElementById('teamsTable'),
+  results: document.getElementById('results'),
+
+  // Admin subtabs
+  tabAdminBudgets: document.getElementById('tabAdminBudgets'),
+  tabAdminResults: document.getElementById('tabAdminResults'),
+  tabAdminPlayerManagement: document.getElementById('tabAdminPlayerManagement'),
+  adminBudgetsTabContent: document.getElementById('adminBudgetsTabContent'),
+  adminResultsTabContent: document.getElementById('adminResultsTabContent'),
+  adminPlayerManagementTabContent: document.getElementById('adminPlayerManagementTabContent'),
+
+  // Admin content areas
+  adminTeamsTable: document.getElementById('adminTeamsTable'),
+  adminResults: document.getElementById('adminResults'),
   playerManagementPools: document.getElementById('playerManagementPools'),
   btnTogglePlayerManagementEdit: document.getElementById('btnTogglePlayerManagementEdit'),
+
+  // Shared auction controls
   remainCat: document.getElementById('remainCat'),
   remainCount: document.getElementById('remainCount'),
   remainList: document.getElementById('remainList'),
@@ -44,15 +67,39 @@ function renderAll() {
   renderCurrent();
   renderPlayerManagement();
   highlightCat();
-  renderRightPanelTabs();
+  renderMainTabs();
+  renderAuctionRightPanelTabs();
+  renderAdminTabs();
 }
 
-function renderRightPanelTabs() {
+function renderMainTabs() {
+  const activeTab = state.ui.activeMainTab;
+
+  dom.auctionView.classList.add('hidden');
+  dom.adminView.classList.add('hidden');
+
+  dom.tabAuctionView.classList.remove('bg-slate-900', 'text-white');
+  dom.tabAuctionView.classList.add('bg-slate-100', 'text-slate-700');
+
+  dom.tabAdminView.classList.remove('bg-slate-900', 'text-white');
+  dom.tabAdminView.classList.add('bg-slate-100', 'text-slate-700');
+
+  if (activeTab === 'auction') {
+    dom.auctionView.classList.remove('hidden');
+    dom.tabAuctionView.classList.add('bg-slate-900', 'text-white');
+    dom.tabAuctionView.classList.remove('bg-slate-100', 'text-slate-700');
+  } else {
+    dom.adminView.classList.remove('hidden');
+    dom.tabAdminView.classList.add('bg-slate-900', 'text-white');
+    dom.tabAdminView.classList.remove('bg-slate-100', 'text-slate-700');
+  }
+}
+
+function renderAuctionRightPanelTabs() {
   const activeTab = state.ui.rightPanelTab;
 
   dom.budgetsTabContent.classList.add('hidden');
   dom.resultsTabContent.classList.add('hidden');
-  dom.playerManagementTabContent.classList.add('hidden');
 
   dom.tabBudgets.classList.remove('bg-slate-900', 'text-white');
   dom.tabBudgets.classList.add('bg-slate-100', 'text-slate-700');
@@ -60,21 +107,45 @@ function renderRightPanelTabs() {
   dom.tabResults.classList.remove('bg-slate-900', 'text-white');
   dom.tabResults.classList.add('bg-slate-100', 'text-slate-700');
 
-  dom.tabPlayerManagement.classList.remove('bg-slate-900', 'text-white');
-  dom.tabPlayerManagement.classList.add('bg-slate-100', 'text-slate-700');
-
   if (activeTab === 'budgets') {
     dom.budgetsTabContent.classList.remove('hidden');
     dom.tabBudgets.classList.add('bg-slate-900', 'text-white');
     dom.tabBudgets.classList.remove('bg-slate-100', 'text-slate-700');
-  } else if (activeTab === 'results') {
+  } else {
     dom.resultsTabContent.classList.remove('hidden');
     dom.tabResults.classList.add('bg-slate-900', 'text-white');
     dom.tabResults.classList.remove('bg-slate-100', 'text-slate-700');
-  } else if (activeTab === 'playerManagement') {
-    dom.playerManagementTabContent.classList.remove('hidden');
-    dom.tabPlayerManagement.classList.add('bg-slate-900', 'text-white');
-    dom.tabPlayerManagement.classList.remove('bg-slate-100', 'text-slate-700');
+  }
+}
+
+function renderAdminTabs() {
+  const activeTab = state.ui.activeAdminTab;
+
+  dom.adminBudgetsTabContent.classList.add('hidden');
+  dom.adminResultsTabContent.classList.add('hidden');
+  dom.adminPlayerManagementTabContent.classList.add('hidden');
+
+  dom.tabAdminBudgets.classList.remove('bg-slate-900', 'text-white');
+  dom.tabAdminBudgets.classList.add('bg-slate-100', 'text-slate-700');
+
+  dom.tabAdminResults.classList.remove('bg-slate-900', 'text-white');
+  dom.tabAdminResults.classList.add('bg-slate-100', 'text-slate-700');
+
+  dom.tabAdminPlayerManagement.classList.remove('bg-slate-900', 'text-white');
+  dom.tabAdminPlayerManagement.classList.add('bg-slate-100', 'text-slate-700');
+
+  if (activeTab === 'budgets') {
+    dom.adminBudgetsTabContent.classList.remove('hidden');
+    dom.tabAdminBudgets.classList.add('bg-slate-900', 'text-white');
+    dom.tabAdminBudgets.classList.remove('bg-slate-100', 'text-slate-700');
+  } else if (activeTab === 'results') {
+    dom.adminResultsTabContent.classList.remove('hidden');
+    dom.tabAdminResults.classList.add('bg-slate-900', 'text-white');
+    dom.tabAdminResults.classList.remove('bg-slate-100', 'text-slate-700');
+  } else {
+    dom.adminPlayerManagementTabContent.classList.remove('hidden');
+    dom.tabAdminPlayerManagement.classList.add('bg-slate-900', 'text-white');
+    dom.tabAdminPlayerManagement.classList.remove('bg-slate-100', 'text-slate-700');
   }
 }
 
@@ -201,36 +272,46 @@ function highlightCat() {
 // ===============================
 function renderTeams() {
   dom.teamsTable.innerHTML = '';
+  dom.adminTeamsTable.innerHTML = '';
 
   state.teams.forEach((team, i) => {
-    const row = document.createElement('div');
-    row.className = 'py-2 flex items-center justify-between gap-3';
-
-    row.innerHTML = `
-      <div class="font-medium">${team.name}</div>
-      <div class="text-right">
-        <div class="text-xs text-slate-500">Remaining</div>
-        <div class="font-semibold">
-          <button data-edit-team="${i}" class="editable underline-offset-2 hover:underline">
-            ₹ <span>${fmt(team.budget)}</span>
-          </button>
+    const rowHtml = `
+      <div class="py-2 flex items-center justify-between gap-3">
+        <div class="font-medium">${team.name}</div>
+        <div class="text-right">
+          <div class="text-xs text-slate-500">Remaining</div>
+          <div class="font-semibold">
+            <button data-edit-team="${i}" class="editable underline-offset-2 hover:underline">
+              ₹ <span>${fmt(team.budget)}</span>
+            </button>
+          </div>
         </div>
       </div>
     `;
 
-    dom.teamsTable.appendChild(row);
+    const auctionWrapper = document.createElement('div');
+    auctionWrapper.innerHTML = rowHtml;
+    const auctionRow = auctionWrapper.firstElementChild;
+    dom.teamsTable.appendChild(auctionRow);
 
-    row.querySelector('[data-edit-team]').addEventListener('click', () => {
-      const input = prompt(`Edit remaining budget for ${team.name}`, team.budget);
-      if (input === null) return;
+    const adminWrapper = document.createElement('div');
+    adminWrapper.innerHTML = rowHtml;
+    const adminRow = adminWrapper.firstElementChild;
+    dom.adminTeamsTable.appendChild(adminRow);
 
-      const newVal = Number(input);
-      if (!isNaN(newVal) && newVal >= 0) {
-        state.teams[i].budget = Math.floor(newVal);
-        renderTeams();
-        renderBidButtons();
-        renderResults();
-      }
+    [auctionRow, adminRow].forEach((row) => {
+      row.querySelector('[data-edit-team]').addEventListener('click', () => {
+        const input = prompt(`Edit remaining budget for ${team.name}`, team.budget);
+        if (input === null) return;
+
+        const newVal = Number(input);
+        if (!isNaN(newVal) && newVal >= 0) {
+          state.teams[i].budget = Math.floor(newVal);
+          renderTeams();
+          renderBidButtons();
+          renderResults();
+        }
+      });
     });
   });
 }
@@ -240,6 +321,7 @@ function renderTeams() {
 // ===============================
 function renderResults() {
   dom.results.innerHTML = '';
+  dom.adminResults.innerHTML = '';
 
   const byTeam = new Map(
     state.teams.map((t, i) => [i, { teamName: t.name, players: [], spent: 0 }])
@@ -253,66 +335,70 @@ function renderResults() {
     teamData.spent += sale.price;
   });
 
-  byTeam.forEach((teamData, idx) => {
-    const container = document.createElement('div');
-    container.className = 'rounded-xl border border-slate-200 p-3 mb-4';
+  const renderInto = (target) => {
+    byTeam.forEach((teamData, idx) => {
+      const container = document.createElement('div');
+      container.className = 'rounded-xl border border-slate-200 p-3 mb-4';
 
-    const playerList =
-      teamData.players.length === 0
-        ? '<li class="text-slate-500 text-sm">No players yet</li>'
-        : teamData.players
-            .map(
-              (p) => `
-                <li class="flex justify-between">
-                  <span>
-                    ${p.playerName}
-                    <span class="text-xs text-slate-500">(${catLabel(p.category)})</span>
-                  </span>
-                  <span>₹ ${fmt(p.price)}</span>
-                </li>`
-            )
-            .join('');
-
-    container.innerHTML = `
-      <div class="flex items-center justify-between mb-2">
-        <div class="font-semibold">${teamData.teamName}</div>
-        <div class="text-sm text-slate-600">
-          Spent: <strong>₹ ${fmt(teamData.spent)}</strong>
-          &bull;
-          Left: <strong>₹ ${fmt(state.teams[idx].budget)}</strong>
-        </div>
-      </div>
-      <ul class="space-y-1 list-disc pl-5">${playerList}</ul>
-    `;
-
-    dom.results.appendChild(container);
-  });
-
-  // Unsold players
-  const unsoldSection = document.createElement('div');
-  unsoldSection.className = 'rounded-xl border border-rose-300 p-3 bg-rose-50';
-
-  unsoldSection.innerHTML = `
-    <h4 class="font-semibold text-rose-700 mb-2">UnSold Players</h4>
-    <ul class="list-disc pl-5 space-y-1">
-      ${
-        state.pools.UNSOLD.length
-          ? state.pools.UNSOLD
+      const playerList =
+        teamData.players.length === 0
+          ? '<li class="text-slate-500 text-sm">No players yet</li>'
+          : teamData.players
               .map(
                 (p) => `
-                  <li>
-                    ${p.name}
-                    <span class="text-xs text-slate-500">(${p.position || 'N/A'})</span>
-                    &mdash; ₹ ${fmt(p.basePrice)}
+                  <li class="flex justify-between">
+                    <span>
+                      ${p.playerName}
+                      <span class="text-xs text-slate-500">(${catLabel(p.category)})</span>
+                    </span>
+                    <span>₹ ${fmt(p.price)}</span>
                   </li>`
               )
-              .join('')
-          : '<li class="text-slate-500 text-sm">No unsold players</li>'
-      }
-    </ul>
-  `;
+              .join('');
 
-  dom.results.appendChild(unsoldSection);
+      container.innerHTML = `
+        <div class="flex items-center justify-between mb-2">
+          <div class="font-semibold">${teamData.teamName}</div>
+          <div class="text-sm text-slate-600">
+            Spent: <strong>₹ ${fmt(teamData.spent)}</strong>
+            &bull;
+            Left: <strong>₹ ${fmt(state.teams[idx].budget)}</strong>
+          </div>
+        </div>
+        <ul class="space-y-1 list-disc pl-5">${playerList}</ul>
+      `;
+
+      target.appendChild(container);
+    });
+
+    const unsoldSection = document.createElement('div');
+    unsoldSection.className = 'rounded-xl border border-rose-300 p-3 bg-rose-50';
+
+    unsoldSection.innerHTML = `
+      <h4 class="font-semibold text-rose-700 mb-2">UnSold Players</h4>
+      <ul class="list-disc pl-5 space-y-1">
+        ${
+          state.pools.UNSOLD.length
+            ? state.pools.UNSOLD
+                .map(
+                  (p) => `
+                    <li>
+                      ${p.name}
+                      <span class="text-xs text-slate-500">(${p.position || 'N/A'})</span>
+                      &mdash; ₹ ${fmt(p.basePrice)}
+                    </li>`
+                )
+                .join('')
+            : '<li class="text-slate-500 text-sm">No unsold players</li>'
+        }
+      </ul>
+    `;
+
+    target.appendChild(unsoldSection);
+  };
+
+  renderInto(dom.results);
+  renderInto(dom.adminResults);
 }
 
 // ===============================
@@ -417,7 +503,7 @@ function updateButtonStates() {
 function wireEvents() {
 
   // Category buttons
-  dom.catButtons.forEach(btn => {
+  dom.catButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       setCategory(btn.dataset.cat);
     });
@@ -428,7 +514,18 @@ function wireEvents() {
   dom.btnSkip.addEventListener('click', skipPlayer);
   dom.btnSell.addEventListener('click', sell);
 
-  // Right panel tabs
+  // Top-level tabs
+  dom.tabAuctionView.addEventListener('click', () => {
+    state.ui.activeMainTab = 'auction';
+    renderAll();
+  });
+
+  dom.tabAdminView.addEventListener('click', () => {
+    state.ui.activeMainTab = 'admin';
+    renderAll();
+  });
+
+  // Auction right panel tabs
   dom.tabBudgets.addEventListener('click', () => {
     setRightPanelTab('budgets');
   });
@@ -436,11 +533,24 @@ function wireEvents() {
   dom.tabResults.addEventListener('click', () => {
     setRightPanelTab('results');
   });
-  
-  dom.tabPlayerManagement.addEventListener('click', () => {
-    setRightPanelTab('playerManagement');
+
+  // Admin subtabs
+  dom.tabAdminBudgets.addEventListener('click', () => {
+    state.ui.activeAdminTab = 'budgets';
+    renderAll();
   });
 
+  dom.tabAdminResults.addEventListener('click', () => {
+    state.ui.activeAdminTab = 'results';
+    renderAll();
+  });
+
+  dom.tabAdminPlayerManagement.addEventListener('click', () => {
+    state.ui.activeAdminTab = 'playerManagement';
+    renderAll();
+  });
+
+  // Player Management edit mode
   dom.btnTogglePlayerManagementEdit.addEventListener('click', () => {
     state.ui.playerManagementEditMode = !state.ui.playerManagementEditMode;
     renderPlayerManagement();
@@ -450,36 +560,31 @@ function wireEvents() {
   dom.btnSaveState.addEventListener('click', () => {
     saveState();
   });
-  
+
   // Export CSV
   dom.btnExportCSV.addEventListener('click', () => {
     exportCSV();
   });
-  
+
   // Load state
   dom.fileLoadState.addEventListener('change', (e) => {
     loadState(e.target.files);
   });
-  
+
   // Reset auction
   dom.btnResetAll.addEventListener('click', async () => {
-  
     if (!confirm('Reset the entire auction? This cannot be undone.')) return;
-  
+
     cancelTimer();
-  
     localStorage.removeItem(AUTOSAVE_KEY);
-  
     await loadAuctionData();
-  
     renderAll();
-  
   });
-  
+
   // Bid step change should re-render bid buttons
   dom.bidStepInput.addEventListener('input', () => {
     renderBidButtons();
   });
-  
-  }
+
+}
 
