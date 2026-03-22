@@ -48,6 +48,7 @@ const dom = {
   bidTeamsContainer: document.getElementById('bidTeamsContainer'),
   btnNext: document.getElementById('btnNext'),
   btnSkip: document.getElementById('btnSkip'),
+  btnUndo: document.getElementById('btnUndo'),
   btnSell: document.getElementById('btnSell'),
   btnSaveState: document.getElementById('btnSaveState'),
   btnExportCSV: document.getElementById('btnExportCSV'),
@@ -512,6 +513,7 @@ function wireEvents() {
   // Core buttons
   dom.btnNext.addEventListener('click', nextPlayer);
   dom.btnSkip.addEventListener('click', skipPlayer);
+  dom.btnUndo.addEventListener('click', undoLastSale);
   dom.btnSell.addEventListener('click', sell);
 
   // Top-level tabs
@@ -553,7 +555,7 @@ function wireEvents() {
   // Player Management edit mode
   dom.btnTogglePlayerManagementEdit.addEventListener('click', () => {
     state.ui.playerManagementEditMode = !state.ui.playerManagementEditMode;
-    renderPlayerManagement();
+    renderAll();
   });
 
   // Save state
