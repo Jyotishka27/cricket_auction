@@ -132,6 +132,39 @@ function updatePoolBasePrice(category, newBasePrice) {
   renderAll();
 }
 
+function reauctionPlayer(saleIndex) {
+  const sale = state.sales[saleIndex];
+
+  if (!sale) {
+    alert('Sale record not found.');
+    return;
+  }
+
+  if (!state.pools[sale.category]) {
+    alert('Original pool not found for this player.');
+    return;
+  }
+
+  state.teams[sale.teamIndex].budget += sale.price;
+
+  const restoredPlayer = sale.playerSnapshot
+    ? { ...sale.playerSnapshot }
+    : (() => {
+        const masterPlayer = findPlayerInMaster(sale.playerId, sale.category);
+        return masterPlayer ? { ...masterPlayer, unsoldCount: 0 } : null;
+      })();
+
+  if (!restoredPlayer) {
+    alert('Could not restore player for reauction.');
+    return;
+  }
+
+  state.sales.splice(saleIndex, 1);
+  state.pools[sale.category].push(restoredPlayer);
+
+  renderAll();
+}
+
 // ===============================
 // Player selection
 // ===============================
@@ -271,7 +304,8 @@ function sell() {
     playerName: player.name,
     category,
     price: bid,
-    position: player.position || ''
+    position: player.position || '',
+    playerSnapshot: { ...player }
   });
 
   state.current = null;
