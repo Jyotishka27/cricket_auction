@@ -15,11 +15,13 @@ function setCategory(cat) {
   }
 
   state.category = cat;
+  autoSaveState();
   renderAll();
 }
 
 function setRightPanelTab(tabName) {
   state.ui.rightPanelTab = tabName;
+  autoSaveState();
   renderAll();
 }
 
@@ -49,6 +51,7 @@ function movePlayer(playerId, fromCategory, toCategory) {
   }
 
   state.pools[toCategory].push(player);
+  autoSaveState();
   renderAll();
 }
 
@@ -93,6 +96,7 @@ function updatePlayerBasePrice(playerId, category, newBasePrice) {
     return;
   }
 
+  autoSaveState();
   renderAll();
 }
 
@@ -129,6 +133,7 @@ function updatePoolBasePrice(category, newBasePrice) {
     }
   }
 
+  autoSaveState();
   renderAll();
 }
 
@@ -162,6 +167,7 @@ function reauctionPlayer(saleIndex) {
   state.sales.splice(saleIndex, 1);
   state.pools[sale.category].push(restoredPlayer);
 
+  autoSaveState();
   renderAll();
 }
 
@@ -207,6 +213,7 @@ function nextPlayer() {
   };
 
   cancelTimer();
+  autoSaveState();
   renderAll();
 }
 
@@ -231,6 +238,7 @@ function skipPlayer() {
 
   state.current = null;
   cancelTimer();
+  autoSaveState();
   renderAll();
 }
 
@@ -269,6 +277,7 @@ function placeBid(teamIndex) {
   state.current.bidder = teamIndex;
 
   startOrResetTimer();
+  autoSaveState();
   renderCurrent();
 }
 
@@ -320,6 +329,7 @@ function sell() {
     });
   }
 
+  autoSaveState();
   renderAll();
 }
 
@@ -344,6 +354,7 @@ function undoLastSale() {
     });
   }
 
+  autoSaveState();
   renderAll();
 }
 
