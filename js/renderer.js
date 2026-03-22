@@ -47,6 +47,37 @@ function renderAll() {
   renderRightPanelTabs();
 }
 
+function renderRightPanelTabs() {
+  const activeTab = state.ui.rightPanelTab;
+
+  dom.budgetsTabContent.classList.add('hidden');
+  dom.resultsTabContent.classList.add('hidden');
+  dom.playerManagementTabContent.classList.add('hidden');
+
+  dom.tabBudgets.classList.remove('bg-slate-900', 'text-white');
+  dom.tabBudgets.classList.add('bg-slate-100', 'text-slate-700');
+
+  dom.tabResults.classList.remove('bg-slate-900', 'text-white');
+  dom.tabResults.classList.add('bg-slate-100', 'text-slate-700');
+
+  dom.tabPlayerManagement.classList.remove('bg-slate-900', 'text-white');
+  dom.tabPlayerManagement.classList.add('bg-slate-100', 'text-slate-700');
+
+  if (activeTab === 'budgets') {
+    dom.budgetsTabContent.classList.remove('hidden');
+    dom.tabBudgets.classList.add('bg-slate-900', 'text-white');
+    dom.tabBudgets.classList.remove('bg-slate-100', 'text-slate-700');
+  } else if (activeTab === 'results') {
+    dom.resultsTabContent.classList.remove('hidden');
+    dom.tabResults.classList.add('bg-slate-900', 'text-white');
+    dom.tabResults.classList.remove('bg-slate-100', 'text-slate-700');
+  } else if (activeTab === 'playerManagement') {
+    dom.playerManagementTabContent.classList.remove('hidden');
+    dom.tabPlayerManagement.classList.add('bg-slate-900', 'text-white');
+    dom.tabPlayerManagement.classList.remove('bg-slate-100', 'text-slate-700');
+  }
+}
+
 function renderPlayerManagement() {
   if (!dom.playerManagementPools) return;
 
