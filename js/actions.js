@@ -104,11 +104,16 @@ function updatePoolBasePrice(category, newBasePrice) {
     return;
   }
 
-  (state.pools[category] || []).forEach((player) => {
+  if (!state.pools[category] || !state.skipped[category]) {
+    alert('Invalid pool selected.');
+    return;
+  }
+
+  state.pools[category].forEach((player) => {
     player.basePrice = price;
   });
 
-  (state.skipped[category] || []).forEach((player) => {
+  state.skipped[category].forEach((player) => {
     player.basePrice = price;
   });
 
