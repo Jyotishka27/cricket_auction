@@ -98,31 +98,40 @@
             <img id="playerImg" class="w-full h-56 rounded-xl border bg-slate-100" />
           </div>
 
-          <div class="md:col-span-2 space-y-3">
-            <h2 id="playerName" class="text-xl font-bold">—</h2>
-            <p>Category: <span id="playerCat">—</span></p>
-            <p>Position: <span id="playerPosition">—</span></p>
-            <p>Base Price: <span id="playerBase">—</span></p>
-
-            <div>
-              <label class="text-sm">Bid Increment</label>
-              <input id="bidStep" type="number" value="25000" class="w-full border rounded-xl mt-1 p-1" />
+          <div class="md:col-span-2 grid md:grid-cols-2 gap-4 items-start">
+            <div class="space-y-3">
+              <h2 id="playerName" class="text-xl font-bold">—</h2>
+              <p>Category: <span id="playerCat">—</span></p>
+              <p>Position: <span id="playerPosition">—</span></p>
+              <p>Base Price: <span id="playerBase">—</span></p>
+          
+              <div>
+                <label class="text-sm">Bid Increment</label>
+                <input id="bidStep" type="number" value="25000" class="w-full border rounded-xl mt-1 p-1" />
+              </div>
+          
+              <div>
+                <label class="text-sm">Current Bid</label>
+                <input id="currentBid" type="number" readonly class="w-full border rounded-xl mt-1 p-1" />
+              </div>
             </div>
-
-            <div>
-              <label class="text-sm">Current Bid</label>
-              <input id="currentBid" type="number" readonly class="w-full border rounded-xl mt-1 p-1" />
+          
+            <div class="current-bidder-box">
+              <div class="current-bidder-label">Current Bidder</div>
+              <div id="currentBidderName" class="current-bidder-name">—</div>
             </div>
-
-            <div id="bidTeamsContainer" class="grid grid-cols-3 gap-2"></div>
-
-            <div class="flex items-center gap-3">
-              <button id="btnSell" class="px-3 py-2 rounded-xl bg-emerald-600 text-white">Sell</button>
-              <span>Timer: <span id="countdown">—</span></span>
-              <button id="btnCancelTimer" class="px-2 py-1 border rounded-lg text-xs">Cancel</button>
+          
+            <div class="md:col-span-2">
+              <div id="bidTeamsContainer" class="grid grid-cols-3 gap-2"></div>
+          
+              <div class="flex items-center gap-3 mt-3">
+                <button id="btnSell" class="px-3 py-2 rounded-xl bg-emerald-600 text-white">Sell</button>
+                <span>Timer: <span id="countdown">—</span></span>
+                <button id="btnCancelTimer" class="px-2 py-1 border rounded-lg text-xs">Cancel</button>
+              </div>
+          
+              <div id="warn" class="text-rose-600 text-sm mt-2"></div>
             </div>
-
-            <div id="warn" class="text-rose-600 text-sm"></div>
           </div>
 
         </div>
