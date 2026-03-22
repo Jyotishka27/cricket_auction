@@ -23,9 +23,11 @@ const dom = {
   tabAdminResults: document.getElementById('tabAdminResults'),
   tabAdminPlayerManagement: document.getElementById('tabAdminPlayerManagement'),
   tabAdminReauction: document.getElementById('tabAdminReauction'),
+  tabAdminRules: document.getElementById('tabAdminRules'),
   adminBudgetsTabContent: document.getElementById('adminBudgetsTabContent'),
   adminResultsTabContent: document.getElementById('adminResultsTabContent'),
   adminPlayerManagementTabContent: document.getElementById('adminPlayerManagementTabContent'),
+  adminRulesTabContent: document.getElementById('adminRulesTabContent'),
 
   // Admin content areas
   adminTeamsTable: document.getElementById('adminTeamsTable'),
@@ -34,6 +36,11 @@ const dom = {
   btnTogglePlayerManagementEdit: document.getElementById('btnTogglePlayerManagementEdit'),
   adminReauctionTabContent: document.getElementById('adminReauctionTabContent'),
   adminReauctionList: document.getElementById('adminReauctionList'),
+  ruleMinPlayersPerTeam: document.getElementById('ruleMinPlayersPerTeam'),
+  ruleMaxPlayersPerTeam: document.getElementById('ruleMaxPlayersPerTeam'),
+  rulesPoolsTableBody: document.getElementById('rulesPoolsTableBody'),
+  btnSaveRules: document.getElementById('btnSaveRules'),
+  rulesMessage: document.getElementById('rulesMessage'),
 
   // Shared auction controls
   remainCat: document.getElementById('remainCat'),
@@ -71,6 +78,7 @@ function renderAll() {
   renderCurrent();
   renderPlayerManagement();
   renderReauction();
+  renderRules();
   highlightCat();
   renderMainTabs();
   renderAuctionRightPanelTabs();
@@ -130,6 +138,7 @@ function renderAdminTabs() {
   dom.adminResultsTabContent.classList.add('hidden');
   dom.adminPlayerManagementTabContent.classList.add('hidden');
   dom.adminReauctionTabContent.classList.add('hidden');
+  dom.adminRulesTabContent.classList.add('hidden');
 
   dom.tabAdminBudgets.classList.remove('bg-slate-900', 'text-white');
   dom.tabAdminBudgets.classList.add('bg-slate-100', 'text-slate-700');
@@ -142,6 +151,8 @@ function renderAdminTabs() {
 
   dom.tabAdminReauction.classList.remove('bg-slate-900', 'text-white');
   dom.tabAdminReauction.classList.add('bg-slate-100', 'text-slate-700');
+  dom.tabAdminRules.classList.remove('bg-slate-900', 'text-white');
+  dom.tabAdminRules.classList.add('bg-slate-100', 'text-slate-700');
 
   if (activeTab === 'budgets') {
     dom.adminBudgetsTabContent.classList.remove('hidden');
@@ -159,6 +170,10 @@ function renderAdminTabs() {
     dom.adminReauctionTabContent.classList.remove('hidden');
     dom.tabAdminReauction.classList.add('bg-slate-900', 'text-white');
     dom.tabAdminReauction.classList.remove('bg-slate-100', 'text-slate-700');
+  } else if (activeTab === 'rules') {
+    dom.adminRulesTabContent.classList.remove('hidden');
+    dom.tabAdminRules.classList.add('bg-slate-900', 'text-white');
+    dom.tabAdminRules.classList.remove('bg-slate-100', 'text-slate-700');
   }
 }
 
@@ -351,6 +366,54 @@ function renderReauction() {
 
       reauctionPlayer(index);
     });
+  });
+}
+
+function renderRules() {
+  if (!dom.ruleMinPlayersPerTeam || !dom.ruleMaxPlayersPerTeam || !dom.rulesPoolsTableBody) return;
+  if (!state.rules) return;
+
+  dom.ruleMinPlayersPerTeam.value = state.rules.minPlayersPerTeam ?? '';
+  dom.ruleMaxPlayersPerTeam.value = state.rules.maxPlayersPerTeam ?? '';
+
+  dom.rulesPoolsTableBody.innerHTML = '';
+
+  Object.keys(state.rules.pools || {}).forEach((poolId) => {
+    const poolRule = state.rules.pools[poolId];
+
+    const tr = document.createElement('tr');
+    tr.className = 'border-t border-slate-200';
+
+    tr.innerHTML = `
+      <td class="px-3 py-2 font-medium">${catLabel(poolId)}</td>
+      <td class="px-3 py-2">
+        <input
+          type="checkbox"
+          data-rule-pool-mandatory="${poolId}"
+          ${poolRule.mandatory ? 'checked' : ''}
+        />
+      </td>
+      <td class="px-3 py-2">
+        <input
+          type="number"
+          min="0"
+          data-rule-pool-min="${poolId}"
+          value="${poolRule.min}"
+          class="w-20 border rounded-lg p-1"
+        />
+      </td>
+      <td class="px-3 py-2">
+        <input
+          type="number"
+          min="0"
+          data-rule-pool-max="${poolId}"
+          value="${poolRule.max}"
+          class="w-20 border rounded-lg p-1"
+        />
+      </td>
+    `;
+
+    dom.rulesPoolsTableBody.appendChild(tr);
   });
 }
 
@@ -661,6 +724,19 @@ function wireEvents() {
     state.ui.activeAdminTab = 'reauction';
     renderAll();
   });
+  
+  if (dom.tabAdminRules) {
+    dom.tabAdminRules.addEventListener('click', () => {
+      state.ui.activeAdminTab = 'rules';
+      renderAll();
+    });
+  }
+  
+  if (dom.btnSaveRules) {
+    dom.btnSaveRules.addEventListener('click', () => {
+      saveRulesFromUI();
+    });
+  }
 
   // Player Management edit mode
   dom.btnTogglePlayerManagementEdit.addEventListener('click', () => {
