@@ -478,6 +478,10 @@ function placeBid(teamIndex) {
     return;
   }
 
+  if (state.current.bidder === teamIndex) {
+    return;
+  }
+
   const step = Math.max(1, Number(dom.bidStepInput.value) || 0);
   const team = state.teams[teamIndex];
 
@@ -514,6 +518,7 @@ function placeBid(teamIndex) {
     return;
   }
 
+  showWarn('');
   state.current.bid = nextBid;
   state.current.bidder = teamIndex;
 
