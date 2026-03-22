@@ -2,6 +2,10 @@
 const dom = {
   teamsTable: document.getElementById('teamsTable'),
   results: document.getElementById('results'),
+  tabBudgets: document.getElementById('tabBudgets'),
+  tabResults: document.getElementById('tabResults'),
+  budgetsTabContent: document.getElementById('budgetsTabContent'),
+  resultsTabContent: document.getElementById('resultsTabContent'),
   remainCat: document.getElementById('remainCat'),
   remainCount: document.getElementById('remainCount'),
   remainList: document.getElementById('remainList'),
@@ -18,7 +22,6 @@ const dom = {
   btnNext: document.getElementById('btnNext'),
   btnSkip: document.getElementById('btnSkip'),
   btnSell: document.getElementById('btnSell'),
-  btnToggleResults: document.getElementById('btnToggleResults'),
   btnSaveState: document.getElementById('btnSaveState'),
   btnExportCSV: document.getElementById('btnExportCSV'),
   btnResetAll: document.getElementById('btnResetAll'),
@@ -36,6 +39,31 @@ function renderAll() {
   renderRemain();
   renderCurrent();
   highlightCat();
+  renderRightPanelTabs();
+}
+
+function renderRightPanelTabs() {
+  const activeTab = state.ui.rightPanelTab;
+
+  if (activeTab === 'budgets') {
+    dom.budgetsTabContent.classList.remove('hidden');
+    dom.resultsTabContent.classList.add('hidden');
+
+    dom.tabBudgets.classList.add('bg-slate-900', 'text-white');
+    dom.tabBudgets.classList.remove('bg-slate-100', 'text-slate-700');
+
+    dom.tabResults.classList.add('bg-slate-100', 'text-slate-700');
+    dom.tabResults.classList.remove('bg-slate-900', 'text-white');
+  } else {
+    dom.budgetsTabContent.classList.add('hidden');
+    dom.resultsTabContent.classList.remove('hidden');
+
+    dom.tabResults.classList.add('bg-slate-900', 'text-white');
+    dom.tabResults.classList.remove('bg-slate-100', 'text-slate-700');
+
+    dom.tabBudgets.classList.add('bg-slate-100', 'text-slate-700');
+    dom.tabBudgets.classList.remove('bg-slate-900', 'text-white');
+  }
 }
 
 // ===============================
@@ -101,8 +129,6 @@ function renderTeams() {
 // ===============================
 function renderResults() {
   dom.results.innerHTML = '';
-
-  if (dom.btnToggleResults.dataset.hidden === '1') return;
 
   const byTeam = new Map(
     state.teams.map((t, i) => [i, { teamName: t.name, players: [], spent: 0 }])
@@ -291,11 +317,14 @@ function wireEvents() {
   dom.btnSkip.addEventListener('click', skipPlayer);
   dom.btnSell.addEventListener('click', sell);
 
-  // Toggle results
-  dom.btnToggleResults.addEventListener('click', () => {
-    const hidden = dom.btnToggleResults.dataset.hidden === '1';
-    dom.btnToggleResults.dataset.hidden = hidden ? '0' : '1';
-    renderResults();
+  // Right panel tabs
+  dom.tabBudgets.addEventListener('click', () => {
+    setRightPanelTab('budgets');
+  });
+
+  dom.tabResults.addEventListener('click', () => {
+    setRightPanelTab('results');
+
   });
 
   // Save state
