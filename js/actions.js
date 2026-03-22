@@ -23,6 +23,35 @@ function setRightPanelTab(tabName) {
   renderAll();
 }
 
+function movePlayer(playerId, fromCategory, toCategory) {
+  if (fromCategory === toCategory) return;
+
+  if (state.current && state.current.player && state.current.player.id === playerId) {
+    alert('Cannot move the player currently being auctioned.');
+    return;
+  }
+
+  let playerIndex = state.pools[fromCategory].findIndex((p) => p.id === playerId);
+  let player = null;
+
+  if (playerIndex !== -1) {
+    player = state.pools[fromCategory].splice(playerIndex, 1)[0];
+  } else {
+    playerIndex = state.skipped[fromCategory].findIndex((p) => p.id === playerId);
+    if (playerIndex !== -1) {
+      player = state.skipped[fromCategory].splice(playerIndex, 1)[0];
+    }
+  }
+
+  if (!player) {
+    alert('Player not found in the selected pool.');
+    return;
+  }
+
+  state.pools[toCategory].push(player);
+  renderAll();
+}
+
 // ===============================
 // Player selection
 // ===============================
