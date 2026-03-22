@@ -22,6 +22,7 @@ const dom = {
   tabAdminBudgets: document.getElementById('tabAdminBudgets'),
   tabAdminResults: document.getElementById('tabAdminResults'),
   tabAdminPlayerManagement: document.getElementById('tabAdminPlayerManagement'),
+  tabAdminReauction: document.getElementById('tabAdminReauction'),
   adminBudgetsTabContent: document.getElementById('adminBudgetsTabContent'),
   adminResultsTabContent: document.getElementById('adminResultsTabContent'),
   adminPlayerManagementTabContent: document.getElementById('adminPlayerManagementTabContent'),
@@ -31,6 +32,8 @@ const dom = {
   adminResults: document.getElementById('adminResults'),
   playerManagementPools: document.getElementById('playerManagementPools'),
   btnTogglePlayerManagementEdit: document.getElementById('btnTogglePlayerManagementEdit'),
+  adminReauctionTabContent: document.getElementById('adminReauctionTabContent'),
+  adminReauctionList: document.getElementById('adminReauctionList'),
 
   // Shared auction controls
   remainCat: document.getElementById('remainCat'),
@@ -67,6 +70,7 @@ function renderAll() {
   renderRemain();
   renderCurrent();
   renderPlayerManagement();
+  renderReauction();
   highlightCat();
   renderMainTabs();
   renderAuctionRightPanelTabs();
@@ -125,6 +129,7 @@ function renderAdminTabs() {
   dom.adminBudgetsTabContent.classList.add('hidden');
   dom.adminResultsTabContent.classList.add('hidden');
   dom.adminPlayerManagementTabContent.classList.add('hidden');
+  dom.adminReauctionTabContent.classList.add('hidden');
 
   dom.tabAdminBudgets.classList.remove('bg-slate-900', 'text-white');
   dom.tabAdminBudgets.classList.add('bg-slate-100', 'text-slate-700');
@@ -135,6 +140,9 @@ function renderAdminTabs() {
   dom.tabAdminPlayerManagement.classList.remove('bg-slate-900', 'text-white');
   dom.tabAdminPlayerManagement.classList.add('bg-slate-100', 'text-slate-700');
 
+  dom.tabAdminReauction.classList.remove('bg-slate-900', 'text-white');
+  dom.tabAdminReauction.classList.add('bg-slate-100', 'text-slate-700');
+
   if (activeTab === 'budgets') {
     dom.adminBudgetsTabContent.classList.remove('hidden');
     dom.tabAdminBudgets.classList.add('bg-slate-900', 'text-white');
@@ -143,10 +151,14 @@ function renderAdminTabs() {
     dom.adminResultsTabContent.classList.remove('hidden');
     dom.tabAdminResults.classList.add('bg-slate-900', 'text-white');
     dom.tabAdminResults.classList.remove('bg-slate-100', 'text-slate-700');
-  } else {
+  } else if (activeTab === 'playerManagement') {
     dom.adminPlayerManagementTabContent.classList.remove('hidden');
     dom.tabAdminPlayerManagement.classList.add('bg-slate-900', 'text-white');
     dom.tabAdminPlayerManagement.classList.remove('bg-slate-100', 'text-slate-700');
+  } else if (activeTab === 'reauction') {
+    dom.adminReauctionTabContent.classList.remove('hidden');
+    dom.tabAdminReauction.classList.add('bg-slate-900', 'text-white');
+    dom.tabAdminReauction.classList.remove('bg-slate-100', 'text-slate-700');
   }
 }
 
@@ -287,6 +299,57 @@ function renderPlayerManagement() {
           updatePlayerBasePrice(player.id, key, input);
         });
       }
+    });
+  });
+}
+
+function renderReauction() {
+  if (!dom.adminReauctionList) return;
+
+  dom.adminReauctionList.innerHTML = '';
+
+  if (!state.sales.length) {
+    dom.adminReauctionList.innerHTML = `
+      <div class="text-sm text-slate-500">No sold players available for reauction.</div>
+    `;
+    return;
+  }
+
+  state.sales.forEach((sale, index) => {
+    const card = document.createElement('div');
+    card.className = 'rounded-xl border border-slate-200 p-3 bg-white';
+
+    card.innerHTML = `
+      <div class="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <div class="font-semibold">${sale.playerName}</div>
+          <div class="text-sm text-slate-600 mt-1">
+            Team: <strong>${sale.team}</strong>
+            &bull;
+            Category: <strong>${catLabel(sale.category)}</strong>
+            &bull;
+            Sold: <strong>₹ ${fmt(sale.price)}</strong>
+          </div>
+        </div>
+        <button
+          data-reauction-sale="${index}"
+          class="px-3 py-1.5 rounded-xl bg-amber-600 text-white text-sm"
+        >
+          Reauction
+        </button>
+      </div>
+    `;
+
+    dom.adminReauctionList.appendChild(card);
+
+    const btn = card.querySelector(`[data-reauction-sale="${index}"]`);
+    btn.addEventListener('click', () => {
+      const ok = confirm(
+        `Reauction ${sale.playerName}? This will refund ${sale.team} and return the player to ${catLabel(sale.category)} pool.`
+      );
+      if (!ok) return;
+
+      reauctionPlayer(index);
     });
   });
 }
@@ -591,6 +654,11 @@ function wireEvents() {
 
   dom.tabAdminPlayerManagement.addEventListener('click', () => {
     state.ui.activeAdminTab = 'playerManagement';
+    renderAll();
+  });
+
+  dom.tabAdminReauction.addEventListener('click', () => {
+    state.ui.activeAdminTab = 'reauction';
     renderAll();
   });
 
