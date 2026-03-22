@@ -200,6 +200,12 @@
         >
           Reauction
         </button>
+        <button
+          id="tabAdminRules"
+          class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium hover:bg-slate-200"
+        >
+          Rules
+        </button>
       </div>
 
       <!-- Admin Budgets -->
@@ -233,6 +239,57 @@
       <div id="adminReauctionTabContent" class="hidden">
         <h3 class="font-semibold mb-3">Reauction Sold Players</h3>
         <div id="adminReauctionList" class="space-y-3"></div>
+      </div>
+
+      <div id="adminRulesTabContent" class="hidden">
+        <h3 class="font-semibold mb-3">Auction Rules</h3>
+      
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+          <label class="block">
+            <span class="text-sm text-slate-600">Minimum Players Per Team</span>
+            <input
+              id="ruleMinPlayersPerTeam"
+              type="number"
+              min="1"
+              class="w-full border rounded-xl mt-1 p-2"
+            />
+          </label>
+      
+          <label class="block">
+            <span class="text-sm text-slate-600">Maximum Players Per Team</span>
+            <input
+              id="ruleMaxPlayersPerTeam"
+              type="number"
+              min="1"
+              class="w-full border rounded-xl mt-1 p-2"
+            />
+          </label>
+        </div>
+      
+        <div class="overflow-x-auto">
+          <table class="min-w-full border border-slate-200 rounded-xl overflow-hidden text-sm">
+            <thead class="bg-slate-100">
+              <tr>
+                <th class="text-left px-3 py-2">Pool</th>
+                <th class="text-left px-3 py-2">Mandatory</th>
+                <th class="text-left px-3 py-2">Min</th>
+                <th class="text-left px-3 py-2">Max</th>
+              </tr>
+            </thead>
+            <tbody id="rulesPoolsTableBody"></tbody>
+          </table>
+        </div>
+      
+        <div class="mt-4 flex items-center gap-2">
+          <button
+            id="btnSaveRules"
+            class="px-3 py-1.5 rounded-xl bg-slate-900 text-white"
+          >
+            Save Rules
+          </button>
+        </div>
+      
+        <div id="rulesMessage" class="mt-3 text-sm text-slate-600"></div>
       </div>
       
     </div>
