@@ -1,4 +1,4 @@
-const AUTOSAVE_KEY = 'cricket_auction_autosave';
+var AUTOSAVE_KEY = 'cricket_auction_autosave';
 
 function autoSaveState() {
   const payload = {
