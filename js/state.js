@@ -7,6 +7,7 @@ const state = {
   sales: [],
   timer: { handle: null, left: 0, running: false },
   ui: {
-    rightPanelTab: 'budgets'
+    rightPanelTab: 'budgets',
+    playerManagementEditMode: false
   }
 };
