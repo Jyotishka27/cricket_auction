@@ -179,9 +179,23 @@ function renderPlayerManagement() {
     section.className = 'rounded-xl border border-slate-200 p-3';
 
     section.innerHTML = `
-      <div class="flex items-center justify-between mb-2">
-        <h4 class="font-semibold">${label}</h4>
-        <span class="text-sm text-slate-500">${players.length} players</span>
+      <div class="flex items-center justify-between mb-2 gap-2 flex-wrap">
+        <div class="flex items-center gap-2">
+          <h4 class="font-semibold">${label}</h4>
+          <span class="text-sm text-slate-500">${players.length} players</span>
+        </div>
+        ${
+          state.ui.playerManagementEditMode
+            ? `
+              <button
+                data-bulk-price-category="${key}"
+                class="px-2 py-1 rounded-lg border border-slate-300 text-sm"
+              >
+                Bulk Change Price
+              </button>
+            `
+            : ''
+        }
       </div>
       <div class="grid gap-2" id="pool-${key}"></div>
     `;
@@ -190,6 +204,19 @@ function renderPlayerManagement() {
 
     const poolContainer = section.querySelector(`#pool-${key}`);
 
+    if (state.ui.playerManagementEditMode) {
+      const bulkPriceButton = section.querySelector(`[data-bulk-price-category="${key}"]`);
+    
+      if (bulkPriceButton) {
+        bulkPriceButton.addEventListener('click', () => {
+          const input = prompt(`Enter new base price for all players in ${label}`, '');
+          if (input === null) return;
+    
+          updatePoolBasePrice(key, input);
+        });
+      }
+    }
+    
     if (players.length === 0) {
       poolContainer.innerHTML = `<div class="text-sm text-slate-500">No players</div>`;
       return;
@@ -204,45 +231,60 @@ function renderPlayerManagement() {
         <div class="text-xs text-slate-500 mb-2">
           ${player.position || 'N/A'} • ₹ ${fmt(player.basePrice)}
         </div>
-        ${
-          state.ui.playerManagementEditMode
-            ? `
-              <div class="flex items-center gap-2 flex-wrap">
-                <select data-move-player="${player.id}" class="border rounded-lg px-2 py-1 text-sm">
-                  <option value="">Move to...</option>
-                  <option value="X">Elite</option>
-                  <option value="P">Prime</option>
-                  <option value="A">Core</option>
-                  <option value="B">Developing</option>
-                  <option value="UNSOLD">UnSold</option>
-                </select>
-                <button
-                  data-move-player-btn="${player.id}"
-                  data-from-category="${key}"
-                  class="px-2 py-1 rounded-lg bg-slate-900 text-white text-sm"
-                >
-                  Move
-                </button>
-              </div>
-            `
-            : ''
-        }
+          ${
+            state.ui.playerManagementEditMode
+              ? `
+                <div class="flex items-center gap-2 flex-wrap">
+                  <select data-move-player="${player.id}" class="border rounded-lg px-2 py-1 text-sm">
+                    <option value="">Move to...</option>
+                    <option value="X">Elite</option>
+                    <option value="P">Prime</option>
+                    <option value="A">Core</option>
+                    <option value="B">Developing</option>
+                    <option value="UNSOLD">UnSold</option>
+                  </select>
+                  <button
+                    data-move-player-btn="${player.id}"
+                    data-from-category="${key}"
+                    class="px-2 py-1 rounded-lg bg-slate-900 text-white text-sm"
+                  >
+                    Move
+                  </button>
+                  <button
+                    data-edit-price-player="${player.id}"
+                    data-edit-price-category="${key}"
+                    class="px-2 py-1 rounded-lg border border-slate-300 text-sm"
+                  >
+                    Edit Price
+                  </button>
+                </div>
+              `
+              : ''
+          }
       `;
 
       poolContainer.appendChild(card);
 
       if (state.ui.playerManagementEditMode) {
         const select = card.querySelector(`[data-move-player="${player.id}"]`);
-        const button = card.querySelector(`[data-move-player-btn="${player.id}"]`);
-
-        button.addEventListener('click', () => {
+        const moveButton = card.querySelector(`[data-move-player-btn="${player.id}"]`);
+        const editPriceButton = card.querySelector(`[data-edit-price-player="${player.id}"]`);
+      
+        moveButton.addEventListener('click', () => {
           const targetCategory = select.value;
           if (!targetCategory) {
             alert('Please select a target pool.');
             return;
           }
-
+      
           movePlayer(player.id, key, targetCategory);
+        });
+      
+        editPriceButton.addEventListener('click', () => {
+          const input = prompt(`Enter new base price for ${player.name}`, player.basePrice);
+          if (input === null) return;
+      
+          updatePlayerBasePrice(player.id, key, input);
         });
       }
     });
