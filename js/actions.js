@@ -252,6 +252,224 @@ function cancelAuction() {
 }
 
 // ===============================
+// Rules / Squad helpers
+// ===============================
+function getTeamSales(teamIndex) {
+  return state.sales.filter((sale) => sale.teamIndex === teamIndex);
+}
+
+function getTeamTotalPlayers(teamIndex) {
+  return getTeamSales(teamIndex).length;
+}
+
+function getTeamPoolCount(teamIndex, poolId) {
+  return getTeamSales(teamIndex).filter((sale) => sale.category === poolId).length;
+}
+
+function getAvailablePlayersByPool(poolId, excludePlayerId = null) {
+  const players = [
+    ...(state.pools[poolId] || []),
+    ...(state.skipped[poolId] || [])
+  ];
+
+  return players.filter((player) => player.id !== excludePlayerId);
+}
+
+function getHypotheticalTeamCounts(teamIndex, currentPlayerCategory) {
+  const counts = {};
+
+  Object.keys(state.rules.pools || {}).forEach((poolId) => {
+    counts[poolId] = getTeamPoolCount(teamIndex, poolId);
+  });
+
+  counts[currentPlayerCategory] = (counts[currentPlayerCategory] || 0) + 1;
+  return counts;
+}
+
+function getMinimumCompletionCost(teamIndex, currentPlayer) {
+  const rules = state.rules;
+  const hypotheticalCounts = getHypotheticalTeamCounts(teamIndex, currentPlayer.category);
+
+  let hypotheticalTotalPlayers = getTeamTotalPlayers(teamIndex) + 1;
+  let reservedCost = 0;
+  const reservedPlayerIds = new Set();
+  const reservedCounts = { ...hypotheticalCounts };
+
+  // Step 1: satisfy per-pool minimums
+  for (const poolId of Object.keys(rules.pools || {})) {
+    const poolRule = rules.pools[poolId];
+    const deficit = Math.max(0, poolRule.min - (reservedCounts[poolId] || 0));
+
+    if (deficit === 0) continue;
+
+    const candidates = getAvailablePlayersByPool(poolId, currentPlayer.id)
+      .sort((a, b) => a.basePrice - b.basePrice);
+
+    if (candidates.length < deficit) {
+      return Infinity;
+    }
+
+    for (let i = 0; i < deficit; i++) {
+      reservedCost += candidates[i].basePrice;
+      reservedPlayerIds.add(candidates[i].id);
+      reservedCounts[poolId] = (reservedCounts[poolId] || 0) + 1;
+      hypotheticalTotalPlayers += 1;
+    }
+  }
+
+  // Step 2: satisfy overall team minimum
+  let extraPlayersNeeded = Math.max(0, rules.minPlayersPerTeam - hypotheticalTotalPlayers);
+
+  if (extraPlayersNeeded === 0) {
+    return reservedCost;
+  }
+
+  const extraCandidates = [];
+
+  for (const poolId of Object.keys(rules.pools || {})) {
+    const poolRule = rules.pools[poolId];
+    const currentCountInPool = reservedCounts[poolId] || 0;
+    const remainingSlotsInPool = Math.max(0, poolRule.max - currentCountInPool);
+
+    if (remainingSlotsInPool === 0) continue;
+
+    const candidates = getAvailablePlayersByPool(poolId, currentPlayer.id)
+      .filter((player) => !reservedPlayerIds.has(player.id))
+      .sort((a, b) => a.basePrice - b.basePrice)
+      .slice(0, remainingSlotsInPool);
+
+    extraCandidates.push(
+      ...candidates.map((player) => ({
+        ...player,
+        __poolId: poolId
+      }))
+    );
+  }
+
+  extraCandidates.sort((a, b) => a.basePrice - b.basePrice);
+
+  if (extraCandidates.length < extraPlayersNeeded) {
+    return Infinity;
+  }
+
+  for (let i = 0; i < extraPlayersNeeded; i++) {
+    reservedCost += extraCandidates[i].basePrice;
+  }
+
+  return reservedCost;
+}
+
+function getMaxAllowedBid(teamIndex) {
+  if (!state.current) return 0;
+
+  const team = state.teams[teamIndex];
+  const currentPlayer = {
+    ...state.current.player,
+    category: state.current.category
+  };
+
+  const currentTotalPlayers = getTeamTotalPlayers(teamIndex);
+  if (currentTotalPlayers >= state.rules.maxPlayersPerTeam) {
+    return 0;
+  }
+
+  const currentPoolCount = getTeamPoolCount(teamIndex, currentPlayer.category);
+  const poolRule = state.rules.pools[currentPlayer.category];
+
+  if (poolRule && currentPoolCount >= poolRule.max) {
+    return 0;
+  }
+
+  const minCompletionCost = getMinimumCompletionCost(teamIndex, currentPlayer);
+
+  if (minCompletionCost === Infinity) {
+    return 0;
+  }
+
+  return Math.max(0, team.budget - minCompletionCost);
+}
+
+function saveRulesFromUI() {
+  const minPlayersPerTeam = Math.floor(Number(dom.ruleMinPlayersPerTeam.value));
+  const maxPlayersPerTeam = Math.floor(Number(dom.ruleMaxPlayersPerTeam.value));
+
+  if (isNaN(minPlayersPerTeam) || minPlayersPerTeam < 1) {
+    alert('Minimum players per team must be at least 1.');
+    return;
+  }
+
+  if (isNaN(maxPlayersPerTeam) || maxPlayersPerTeam < minPlayersPerTeam) {
+    alert('Maximum players per team must be greater than or equal to minimum players per team.');
+    return;
+  }
+
+  const nextRules = {
+    minPlayersPerTeam,
+    maxPlayersPerTeam,
+    pools: {}
+  };
+
+  for (const poolId of Object.keys(state.rules.pools || {})) {
+    const mandatoryEl = document.querySelector(`[data-rule-pool-mandatory="${poolId}"]`);
+    const minEl = document.querySelector(`[data-rule-pool-min="${poolId}"]`);
+    const maxEl = document.querySelector(`[data-rule-pool-max="${poolId}"]`);
+
+    const mandatory = !!mandatoryEl.checked;
+    const min = Math.floor(Number(minEl.value));
+    const max = Math.floor(Number(maxEl.value));
+
+    if (isNaN(min) || min < 0) {
+      alert(`${catLabel(poolId)} min is invalid.`);
+      return;
+    }
+
+    if (isNaN(max) || max < 0) {
+      alert(`${catLabel(poolId)} max is invalid.`);
+      return;
+    }
+
+    if (max < min) {
+      alert(`${catLabel(poolId)} max cannot be less than min.`);
+      return;
+    }
+
+    if (!mandatory && min > 0) {
+      alert(`${catLabel(poolId)} cannot have min > 0 if mandatory is off.`);
+      return;
+    }
+
+    if (mandatory && min < 1) {
+      alert(`${catLabel(poolId)} must have min at least 1 if mandatory is on.`);
+      return;
+    }
+
+    nextRules.pools[poolId] = { mandatory, min, max };
+  }
+
+  const sumPoolMins = Object.values(nextRules.pools).reduce((sum, pool) => sum + pool.min, 0);
+  const sumPoolMaxes = Object.values(nextRules.pools).reduce((sum, pool) => sum + pool.max, 0);
+
+  if (sumPoolMins > nextRules.maxPlayersPerTeam) {
+    alert('Sum of pool minimums cannot exceed maximum players per team.');
+    return;
+  }
+
+  if (nextRules.minPlayersPerTeam > sumPoolMaxes) {
+    alert('Minimum players per team cannot exceed total possible pool maximums.');
+    return;
+  }
+
+  state.rules = nextRules;
+
+  if (dom.rulesMessage) {
+    dom.rulesMessage.textContent = 'Rules saved successfully.';
+  }
+
+  autoSaveState();
+  renderAll();
+}
+
+// ===============================
 // Bidding
 // ===============================
 function placeBid(teamIndex) {
@@ -268,8 +486,31 @@ function placeBid(teamIndex) {
       ? state.current.bid
       : state.current.bid + step;
 
+  const teamPlayerCount = getTeamTotalPlayers(teamIndex);
+  if (teamPlayerCount >= state.rules.maxPlayersPerTeam) {
+    showWarn(`${team.name} already has the maximum allowed players.`);
+    return;
+  }
+
+  const poolRule = state.rules.pools[state.current.category];
+  const teamPoolCount = getTeamPoolCount(teamIndex, state.current.category);
+
+  if (poolRule && teamPoolCount >= poolRule.max) {
+    showWarn(`${team.name} already reached max players for ${catLabel(state.current.category)}.`);
+    return;
+  }
+
   if (nextBid > team.budget) {
     showWarn(`Insufficient budget for ${team.name}.`);
+    return;
+  }
+
+  const maxAllowedBid = getMaxAllowedBid(teamIndex);
+
+  if (nextBid > maxAllowedBid) {
+    showWarn(
+      `${team.name} cannot bid above ₹ ${fmt(maxAllowedBid)}. They must retain enough budget to complete the squad.`
+    );
     return;
   }
 
@@ -297,9 +538,30 @@ function sell() {
 
   const { player, category, bid, bidder } = state.current;
 
-  // Safety: prevent negative budget
   if (state.teams[bidder].budget < bid) {
     alert('Budget insufficient. Cannot sell.');
+    return;
+  }
+
+  const bidderTeamCount = getTeamTotalPlayers(bidder);
+  if (bidderTeamCount >= state.rules.maxPlayersPerTeam) {
+    alert('This team already has the maximum allowed players.');
+    return;
+  }
+
+  const bidderPoolCount = getTeamPoolCount(bidder, category);
+  const bidderPoolRule = state.rules.pools[category];
+
+  if (bidderPoolRule && bidderPoolCount >= bidderPoolRule.max) {
+    alert(`This team already reached max allowed players for ${catLabel(category)}.`);
+    return;
+  }
+
+  const minCompletionCost = getMinimumCompletionCost(bidder, { ...player, category });
+  const remainingAfterSale = state.teams[bidder].budget - bid;
+
+  if (remainingAfterSale < minCompletionCost) {
+    alert('This sale would violate squad completion budget rules.');
     return;
   }
 
@@ -320,12 +582,11 @@ function sell() {
   state.current = null;
   cancelTimer();
 
-  // Optional broadcast to other tabs
   if (window.BroadcastChannel) {
     const channel = new BroadcastChannel('auction_updates');
     channel.postMessage({
       sales: state.sales,
-      budgets: state.teams.map(t => t.budget)
+      budgets: state.teams.map((t) => t.budget)
     });
   }
 
