@@ -52,6 +52,81 @@ function movePlayer(playerId, fromCategory, toCategory) {
   renderAll();
 }
 
+function updatePlayerBasePrice(playerId, category, newBasePrice) {
+  const price = Math.floor(Number(newBasePrice));
+
+  if (isNaN(price) || price < 0) {
+    alert('Please enter a valid base price.');
+    return;
+  }
+
+  let updated = false;
+
+  const poolPlayer = (state.pools[category] || []).find((p) => p.id === playerId);
+  if (poolPlayer) {
+    poolPlayer.basePrice = price;
+    updated = true;
+  }
+
+  const skippedPlayer = (state.skipped[category] || []).find((p) => p.id === playerId);
+  if (skippedPlayer) {
+    skippedPlayer.basePrice = price;
+    updated = true;
+  }
+
+  if (
+    state.current &&
+    state.current.player &&
+    state.current.player.id === playerId
+  ) {
+    state.current.player.basePrice = price;
+
+    if (state.current.bidder === null) {
+      state.current.bid = price;
+    }
+
+    updated = true;
+  }
+
+  if (!updated) {
+    alert('Player not found.');
+    return;
+  }
+
+  renderAll();
+}
+
+function updatePoolBasePrice(category, newBasePrice) {
+  const price = Math.floor(Number(newBasePrice));
+
+  if (isNaN(price) || price < 0) {
+    alert('Please enter a valid base price.');
+    return;
+  }
+
+  (state.pools[category] || []).forEach((player) => {
+    player.basePrice = price;
+  });
+
+  (state.skipped[category] || []).forEach((player) => {
+    player.basePrice = price;
+  });
+
+  if (
+    state.current &&
+    state.current.category === category &&
+    state.current.player
+  ) {
+    state.current.player.basePrice = price;
+
+    if (state.current.bidder === null) {
+      state.current.bid = price;
+    }
+  }
+
+  renderAll();
+}
+
 // ===============================
 // Player selection
 // ===============================
