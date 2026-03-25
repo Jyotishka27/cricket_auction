@@ -1,4 +1,6 @@
-// use the global AUTOSAVE_KEY from config.js
+import { state } from './state.js';
+import { AUTOSAVE_KEY } from './config.js';
+import { saveAuctionToCloud } from './firebase.js';
 
 export function autoSaveState() {
   const payload = {
@@ -14,9 +16,8 @@ export function autoSaveState() {
 
   localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(payload));
 
-  if (window.saveAuctionToCloud) {
-    window.saveAuctionToCloud();
-  }
+  // 🔥 direct call (no window)
+  saveAuctionToCloud();
 }
 
 export function restoreAutoSavedState() {
@@ -33,18 +34,13 @@ export function restoreAutoSavedState() {
       current: parsed.current ?? null,
       teams: parsed.teams ?? [],
       sales: parsed.sales ?? [],
-      ui: parsed.ui ?? {
-        activeMainTab: 'auction',
-        activeAdminTab: 'budgets',
-        rightPanelTab: 'budgets',
-        playerManagementEditMode: false
-      },
+      ui: parsed.ui ?? {},
       timer: { handle: null, left: 0, running: false }
     });
 
     return true;
   } catch (err) {
-    console.error('Failed to restore autosaved state:', err);
+    console.error('Autosave restore failed:', err);
     return false;
   }
 }
