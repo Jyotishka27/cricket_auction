@@ -611,7 +611,7 @@ function renderRemain() {
 // ===============================
 // Current Player
 // ===============================
-function renderCurrent() {
+export function renderCurrent() {
   if (!state.current) {
     dom.currentPlayerCard.hidden = true;
     if (dom.currentBidderName) dom.currentBidderName.textContent = '—';
