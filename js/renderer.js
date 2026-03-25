@@ -1,5 +1,9 @@
+import { state } from './state.js';
+import { fmt, catLabel } from './utils.js';
+import { placeBid, nextPlayer, skipPlayer, undoLastSale, sell } from './actions.js';
+
 // -- Cached DOM elements --
-const dom = {
+export const dom = {
 
   tabAdminImportExport: document.getElementById('tabAdminImportExport'),
   adminImportExportTabContent: document.getElementById('adminImportExportTabContent'),
