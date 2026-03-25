@@ -76,7 +76,7 @@ const dom = {
 // ===============================
 // Master render
 // ===============================
-function renderAll() {
+export function renderAll() {
   renderTeams();
   renderResults();
   renderRemain();
@@ -697,7 +697,7 @@ function updateButtonStates() {
 // ===============================
 // Wire Initial DOM Events
 // ===============================
-function wireEvents() {
+export function wireEvents() {
 
   // Category buttons
   dom.catButtons.forEach((btn) => {
