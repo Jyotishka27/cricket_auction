@@ -28,7 +28,6 @@ import { renderAll } from "./renderer.js";
   console.log("✅ Auction initialized");
 })();
 
-
 // ==============================
 // 📂 IMPORT PLAYERS (Excel Upload)
 // ==============================
