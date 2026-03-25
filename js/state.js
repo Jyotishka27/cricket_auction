@@ -1,4 +1,4 @@
-const state = {
+export const state = {
   pools: { X: [], P: [], A: [], B: [], UNSOLD: [] },
   skipped: { X: [], P: [], A: [], B: [], UNSOLD: [] },
   category: 'X',
