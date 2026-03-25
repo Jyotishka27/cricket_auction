@@ -178,11 +178,9 @@ async function loadPlayersFromFirebase() {
   }
 }
 
-
-// ===============================
-// 🌐 Expose globally (your pattern)
-// ===============================
-window.saveAuctionToCloud = saveAuctionToCloud;
-window.loadAuctionFromCloud = loadAuctionFromCloud;
-window.uploadPlayersToCloud = uploadPlayersToCloud;
-window.loadPlayersFromFirebase = loadPlayersFromFirebase;
+export {
+  saveAuctionToCloud,
+  loadAuctionFromCloud,
+  uploadPlayersToCloud,
+  loadPlayersFromFirebase
+};
