@@ -691,7 +691,7 @@ function renderBidButtons() {
 // ===============================
 // Button states
 // ===============================
-function updateButtonStates() {
+export function updateButtonStates() {
   const disable = state.timer.running;
   dom.btnNext.disabled = disable;
   dom.btnSkip.disabled = disable;
