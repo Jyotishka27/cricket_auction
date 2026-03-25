@@ -1,12 +1,8 @@
-import './config.js';
-import './state.js';
-import './utils.js';
-import './timer.js';
-import './storage.js';
-import './actions.js';
-import './renderer.js';
-import './autosave.js';
-import './firebase.js';
+import { loadAuctionData } from './storage.js';
+import { restoreAutoSavedState, autoSaveState } from './autosave.js';
+import { wireEvents, renderAll } from './renderer.js';
+import { loadAuctionFromCloud, uploadPlayersToCloud } from './firebase.js';
+import { state } from './state.js';
 
 (async function initAuction() {
   await loadAuctionData();
@@ -14,9 +10,7 @@ import './firebase.js';
   let restored = false;
 
   try {
-    if (window.loadAuctionFromCloud) {
-      restored = await window.loadAuctionFromCloud();
-    }
+    restored = await loadAuctionFromCloud();
   } catch (err) {
     console.warn("Cloud restore skipped:", err);
   }
@@ -25,8 +19,8 @@ import './firebase.js';
     restoreAutoSavedState();
   }
 
-  wireEvents();   // attach all listeners
-  renderAll();    // render UI once
+  wireEvents();
+  renderAll();
 
   window.addEventListener("beforeunload", autoSaveState);
 
@@ -42,7 +36,6 @@ if (uploadBtn) {
   uploadBtn.addEventListener("click", async () => {
     const fileInput = document.getElementById("fileInput");
     const mode = document.getElementById("importMode")?.value || "replace";
-
     const file = fileInput?.files?.[0];
 
     if (!file) {
@@ -50,7 +43,6 @@ if (uploadBtn) {
       return;
     }
 
-    // 🚨 Prevent overwrite during auction
     if (state.sales.length > 0 || state.current) {
       alert("⚠️ Cannot import after auction has started");
       return;
@@ -63,7 +55,6 @@ if (uploadBtn) {
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json(sheet);
 
-      // Convert to required format
       const players = rows.map((row) => ({
         name: row.player_name?.trim(),
         pool: row.pool?.trim()?.toUpperCase(),
@@ -72,22 +63,20 @@ if (uploadBtn) {
 
       const validPlayers = validatePlayers(players);
 
-      if (validPlayers.length === 0) {
-        alert("No valid players found in file");
+      if (!validPlayers.length) {
+        alert("No valid players found");
         return;
       }
 
-      // 🔥 Upload to Firebase
-      const success = await window.uploadPlayersToCloud(validPlayers, mode);
+      const success = await uploadPlayersToCloud(validPlayers, mode);
 
       if (!success) {
         alert("Upload failed");
         return;
       }
 
-      alert("✅ Players uploaded successfully!");
+      alert("✅ Players uploaded!");
 
-      // 🔄 Reload auction instantly
       await loadAuctionData();
       renderAll();
 
@@ -97,25 +86,6 @@ if (uploadBtn) {
     }
   });
 }
-
-
-// ==============================
-// 📥 DOWNLOAD TEMPLATE
-// ==============================
-const downloadBtn = document.getElementById("downloadTemplate");
-
-if (downloadBtn) {
-  downloadBtn.addEventListener("click", () => {
-    const csv = "player_name,pool,base_price\n";
-    const blob = new Blob([csv], { type: "text/csv" });
-
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "player_template.csv";
-    a.click();
-  });
-}
-
 
 // ==============================
 // 🧪 VALIDATION
