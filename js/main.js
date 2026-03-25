@@ -88,6 +88,24 @@ if (uploadBtn) {
 }
 
 // ==============================
+// 📥 DOWNLOAD TEMPLATE
+// ==============================
+const downloadBtn = document.getElementById("downloadTemplate");
+
+if (downloadBtn) {
+  downloadBtn.addEventListener("click", () => {
+    const csv = "player_name,pool,base_price\n";
+
+    const blob = new Blob([csv], { type: "text/csv" });
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "player_template.csv";
+    a.click();
+  });
+}
+
+// ==============================
 // 🧪 VALIDATION
 // ==============================
 function validatePlayers(players) {
