@@ -14,7 +14,7 @@ function applyUnsoldReduction(player) {
   );
 }
 
-function showWarn(message) {
+export function showWarn(message) {
   if (!dom || !dom.warn) return;
   dom.warn.textContent = message || '';
 }
