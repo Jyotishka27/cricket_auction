@@ -1,5 +1,9 @@
 // -- Cached DOM elements --
 const dom = {
+
+  tabAdminImportExport: document.getElementById('tabAdminImportExport'),
+  adminImportExportTabContent: document.getElementById('adminImportExportTabContent'),
+  
   // Auction view
   auctionView: document.getElementById('auctionView'),
   adminView: document.getElementById('adminView'),
@@ -140,6 +144,7 @@ function renderAdminTabs() {
   dom.adminPlayerManagementTabContent.classList.add('hidden');
   dom.adminReauctionTabContent.classList.add('hidden');
   dom.adminRulesTabContent.classList.add('hidden');
+  dom.adminImportExportTabContent.classList.add('hidden');
 
   dom.tabAdminBudgets.classList.remove('bg-slate-900', 'text-white');
   dom.tabAdminBudgets.classList.add('bg-slate-100', 'text-slate-700');
@@ -153,6 +158,8 @@ function renderAdminTabs() {
   dom.tabAdminReauction.classList.remove('bg-slate-900', 'text-white');
   dom.tabAdminReauction.classList.add('bg-slate-100', 'text-slate-700');
   dom.tabAdminRules.classList.remove('bg-slate-900', 'text-white');
+  dom.tabAdminImportExport.classList.remove('bg-slate-900', 'text-white');
+  dom.tabAdminImportExport.classList.add('bg-slate-100', 'text-slate-700');
   dom.tabAdminRules.classList.add('bg-slate-100', 'text-slate-700');
 
   if (activeTab === 'budgets') {
@@ -175,6 +182,10 @@ function renderAdminTabs() {
     dom.adminRulesTabContent.classList.remove('hidden');
     dom.tabAdminRules.classList.add('bg-slate-900', 'text-white');
     dom.tabAdminRules.classList.remove('bg-slate-100', 'text-slate-700');
+  } else if (activeTab === 'importExport') {
+    dom.adminImportExportTabContent.classList.remove('hidden');
+    dom.tabAdminImportExport.classList.add('bg-slate-900', 'text-white');
+    dom.tabAdminImportExport.classList.remove('bg-slate-100', 'text-slate-700');
   }
 }
 
@@ -752,6 +763,13 @@ function wireEvents() {
   if (dom.btnSaveRules) {
     dom.btnSaveRules.addEventListener('click', () => {
       saveRulesFromUI();
+    });
+  }
+
+  if (dom.tabAdminImportExport) {
+    dom.tabAdminImportExport.addEventListener('click', () => {
+      state.ui.activeAdminTab = 'importExport';
+      renderAll();
     });
   }
 
