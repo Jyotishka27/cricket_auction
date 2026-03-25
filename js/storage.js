@@ -1,8 +1,10 @@
+import { loadPlayersFromFirebase } from "./firebase.js";
+
 // -------------------------------
 // Load initial auction data
 // -------------------------------
 
-async function loadAuctionData() {
+export async function loadAuctionData() {
   try {
     let playersFromFirebase = [];
 
