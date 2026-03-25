@@ -1,11 +1,13 @@
-// ===============================
-// timer.js
-// ===============================
+import { state } from './state.js';
+import { renderCurrent } from './renderer.js';
+import { autoSaveState } from './autosave.js';
+import { sell } from './actions.js';
+import { updateButtonStates } from './renderer.js'; // important
 
-// -------------------------------
+// ===============================
 // Start or reset auction timer
-// -------------------------------
-function startOrResetTimer() {
+// ===============================
+export function startOrResetTimer() {
   state.timer.left = 45;
 
   if (!state.timer.running) {
@@ -27,10 +29,10 @@ function startOrResetTimer() {
   autoSaveState();
 }
 
-// -------------------------------
+// ===============================
 // Cancel timer safely
-// -------------------------------
-function cancelTimer() {
+// ===============================
+export function cancelTimer() {
   if (state.timer.handle) {
     clearInterval(state.timer.handle);
   }
@@ -46,9 +48,9 @@ function cancelTimer() {
   renderCurrent();
 }
 
-// -------------------------------
+// ===============================
 // Auto-sell when timer expires
-// -------------------------------
+// ===============================
 function autoSellOnTimer() {
   cancelTimer();
 
@@ -61,4 +63,3 @@ function autoSellOnTimer() {
 
   sell();
 }
-
