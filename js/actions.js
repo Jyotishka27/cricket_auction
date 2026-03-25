@@ -1,11 +1,14 @@
 import { state } from './state.js';
-import { fmt, catLabel } from './utils.js';
-import { placeBid, nextPlayer, skipPlayer, undoLastSale, sell } from './actions.js';
+import { autoSaveState } from './autosave.js';
+import { renderAll, renderCurrent } from './renderer.js';
+import { cancelTimer, startOrResetTimer } from './timer.js';
+import { showWarn, applyUnsoldReduction } from './utils.js';
+import { dom } from './renderer.js';
 
 // ===============================
 // Category handling
 // ===============================
-function setCategory(cat) {
+export function setCategory(cat) {
   if (state.timer.running && !confirm('Timer running! Switch category anyway?')) {
     return;
   }
@@ -19,144 +22,8 @@ function setCategory(cat) {
   renderAll();
 }
 
-function setRightPanelTab(tabName) {
+export function setRightPanelTab(tabName) {
   state.ui.rightPanelTab = tabName;
-  autoSaveState();
-  renderAll();
-}
-
-// ===============================
-// Player Management
-// ===============================
-function movePlayer(playerId, fromCategory, toCategory) {
-  if (fromCategory === toCategory) return;
-
-  if (state.current && state.current.player && state.current.player.id === playerId) {
-    alert('Cannot move the player currently being auctioned.');
-    return;
-  }
-
-  let playerIndex = state.pools[fromCategory].findIndex((p) => p.id === playerId);
-  let player = null;
-
-  if (playerIndex !== -1) {
-    player = state.pools[fromCategory].splice(playerIndex, 1)[0];
-  } else {
-    playerIndex = state.skipped[fromCategory].findIndex((p) => p.id === playerId);
-    if (playerIndex !== -1) {
-      player = state.skipped[fromCategory].splice(playerIndex, 1)[0];
-    }
-  }
-
-  if (!player) {
-    alert('Player not found in the selected pool.');
-    return;
-  }
-
-  state.pools[toCategory].push(player);
-  autoSaveState();
-  renderAll();
-}
-
-function updatePlayerBasePrice(playerId, category, newBasePrice) {
-  const price = Math.floor(Number(newBasePrice));
-
-  if (isNaN(price) || price < 0) {
-    alert('Please enter a valid base price.');
-    return;
-  }
-
-  let updated = false;
-
-  const poolPlayer = (state.pools[category] || []).find((p) => p.id === playerId);
-  if (poolPlayer) {
-    poolPlayer.basePrice = price;
-    updated = true;
-  }
-
-  const skippedPlayer = (state.skipped[category] || []).find((p) => p.id === playerId);
-  if (skippedPlayer) {
-    skippedPlayer.basePrice = price;
-    updated = true;
-  }
-
-  if (state.current && state.current.player?.id === playerId) {
-    state.current.player.basePrice = price;
-
-    if (state.current.bidder === null) {
-      state.current.bid = price;
-    }
-
-    updated = true;
-  }
-
-  if (!updated) {
-    alert('Player not found.');
-    return;
-  }
-
-  autoSaveState();
-  renderAll();
-}
-
-function updatePoolBasePrice(category, newBasePrice) {
-  const price = Math.floor(Number(newBasePrice));
-
-  if (isNaN(price) || price < 0) {
-    alert('Please enter a valid base price.');
-    return;
-  }
-
-  if (!state.pools[category] || !state.skipped[category]) {
-    alert('Invalid pool selected.');
-    return;
-  }
-
-  state.pools[category].forEach((player) => {
-    player.basePrice = price;
-  });
-
-  state.skipped[category].forEach((player) => {
-    player.basePrice = price;
-  });
-
-  if (state.current?.category === category) {
-    state.current.player.basePrice = price;
-
-    if (state.current.bidder === null) {
-      state.current.bid = price;
-    }
-  }
-
-  autoSaveState();
-  renderAll();
-}
-
-// ===============================
-// Reauction
-// ===============================
-function reauctionPlayer(saleIndex) {
-  const sale = state.sales[saleIndex];
-
-  if (!sale) {
-    alert('Sale record not found.');
-    return;
-  }
-
-  state.teams[sale.teamIndex].budget += sale.price;
-
-  const restoredPlayer = sale.playerSnapshot
-    ? { ...sale.playerSnapshot }
-    : findPlayerInMaster(sale.playerId, sale.category);
-
-  if (!restoredPlayer) {
-    alert('Could not restore player for reauction.');
-    return;
-  }
-
-  state.sales.splice(saleIndex, 1);
-  state.pools[sale.category].push({ ...restoredPlayer, unsoldCount: 0 });
-
   autoSaveState();
   renderAll();
 }
@@ -164,7 +31,7 @@ function reauctionPlayer(saleIndex) {
 // ===============================
 // Player selection
 // ===============================
-function nextPlayer() {
+export function nextPlayer() {
   if (state.current) {
     const { player, category, bidder } = state.current;
 
@@ -182,7 +49,7 @@ function nextPlayer() {
   const skipped = state.skipped[state.category] || [];
   const merged = [...pool, ...skipped];
 
-  if (merged.length === 0) {
+  if (!merged.length) {
     alert('No players left in this category.');
     return;
   }
@@ -207,9 +74,9 @@ function nextPlayer() {
 }
 
 // ===============================
-// Skip / Unsold logic
+// Skip player
 // ===============================
-function skipPlayer() {
+export function skipPlayer() {
   if (!state.current) {
     alert('No active player to skip.');
     return;
@@ -233,7 +100,7 @@ function skipPlayer() {
 // ===============================
 // Bidding
 // ===============================
-function placeBid(teamIndex) {
+export function placeBid(teamIndex) {
   if (!state.current) {
     alert('No active player.');
     return;
@@ -266,7 +133,7 @@ function placeBid(teamIndex) {
 // ===============================
 // Sell player
 // ===============================
-function sell() {
+export function sell() {
   if (!state.current || state.current.bidder === null) {
     alert('Cannot sell.');
     return;
@@ -298,7 +165,7 @@ function sell() {
 // ===============================
 // Undo last sale
 // ===============================
-function undoLastSale() {
+export function undoLastSale() {
   const last = state.sales.pop();
 
   if (!last) {
@@ -308,7 +175,7 @@ function undoLastSale() {
 
   state.teams[last.teamIndex].budget += last.price;
 
-  const player = last.playerSnapshot || findPlayerInMaster(last.playerId, last.category);
+  const player = last.playerSnapshot;
 
   if (player) {
     state.pools[last.category].push({ ...player, unsoldCount: 0 });
@@ -316,18 +183,4 @@ function undoLastSale() {
 
   autoSaveState();
   renderAll();
-}
-
-// ===============================
-// 🔥 FIXED MASTER LOOKUP
-// ===============================
-function findPlayerInMaster(id, cat) {
-  if (cat === 'UNSOLD') return null;
-
-  const players = [
-    ...(state.pools[cat] || []),
-    ...(state.skipped[cat] || [])
-  ];
-
-  return players.find(p => p.id === id) || null;
 }
