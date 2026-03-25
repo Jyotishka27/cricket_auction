@@ -1,6 +1,6 @@
 import { loadAuctionData } from "./storage.js";
 import { restoreAutoSavedState, autoSaveState } from "./autosave.js";
-import { renderAll } from "./renderer.js";
+import { renderAll, wireEvents } from "./renderer.js";
 
 (async function initAuction() {
   await loadAuctionData();
@@ -19,7 +19,8 @@ import { renderAll } from "./renderer.js";
     restoreAutoSavedState();
   }
 
-  // ❌ wireEvents removed
+  wireEvents();
+  renderAll();
 
   renderAll();
 
