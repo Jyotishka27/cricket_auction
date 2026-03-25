@@ -19,10 +19,8 @@ import { renderAll, wireEvents } from "./renderer.js";
     restoreAutoSavedState();
   }
 
-  wireEvents();
-  renderAll();
-
-  renderAll();
+  wireEvents();   // attach all listeners
+  renderAll();    // render UI once
 
   window.addEventListener("beforeunload", autoSaveState);
 
