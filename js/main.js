@@ -1,6 +1,12 @@
-import { loadAuctionData } from "./storage.js";
-import { restoreAutoSavedState, autoSaveState } from "./autosave.js";
-import { renderAll, wireEvents } from "./renderer.js";
+import './config.js';
+import './state.js';
+import './utils.js';
+import './timer.js';
+import './storage.js';
+import './actions.js';
+import './renderer.js';
+import './autosave.js';
+import './firebase.js';
 
 (async function initAuction() {
   await loadAuctionData();
