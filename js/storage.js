@@ -1,9 +1,12 @@
 import { loadPlayersFromFirebase } from "./firebase.js";
+import { state } from "./state.js";
+import { renderAll } from "./renderer.js";
+import { cancelTimer } from "./timer.js";
+import { catLabel } from "./utils.js";
 
 // -------------------------------
 // Load initial auction data
 // -------------------------------
-
 export async function loadAuctionData() {
   try {
     let playersFromFirebase = [];
@@ -21,7 +24,6 @@ export async function loadAuctionData() {
     if (playersFromFirebase && playersFromFirebase.length > 0) {
       console.log("✅ Using Firebase player data");
 
-      // Reset pools
       state.pools = { X: [], P: [], A: [], B: [], UNSOLD: [] };
 
       playersFromFirebase.forEach(player => {
@@ -40,7 +42,6 @@ export async function loadAuctionData() {
         });
       });
 
-      // ⚠️ Teams still come from JSON (you can later move this to Firebase too)
       const response = await fetch('./data/auction-data.json');
       const data = await response.json();
 
@@ -61,7 +62,6 @@ export async function loadAuctionData() {
 
       const data = await response.json();
 
-      // Inject players into pools
       if (data.players) {
         Object.keys(data.players).forEach(cat => {
           state.pools[cat] = data.players[cat];
@@ -87,7 +87,7 @@ export async function loadAuctionData() {
 // -------------------------------
 // Export auction results as CSV
 // -------------------------------
-function exportCSV() {
+export function exportCSV() {
   const rows = [];
 
   state.teams.forEach((team, idx) => {
@@ -95,6 +95,7 @@ function exportCSV() {
     rows.push(['Time', 'Player', 'Category', 'Position', 'Price']);
 
     const teamSales = state.sales.filter(s => s.teamIndex === idx);
+
     teamSales.forEach(sale => {
       rows.push([
         sale.timeISO,
@@ -105,7 +106,7 @@ function exportCSV() {
       ]);
     });
 
-    rows.push([]); // empty line between teams
+    rows.push([]);
   });
 
   const csvContent = rows
@@ -113,6 +114,7 @@ function exportCSV() {
     .join('\n');
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
   link.download = 'auction-results-teamwise.csv';
@@ -121,11 +123,10 @@ function exportCSV() {
   link.remove();
 }
 
-
 // -------------------------------
 // Manual save auction state
 // -------------------------------
-function saveState() {
+export function saveState() {
   const snapshot = {
     state: {
       category: state.category,
@@ -151,15 +152,15 @@ function saveState() {
   link.remove();
 }
 
-
 // -------------------------------
 // Load auction state from file
 // -------------------------------
-function loadState(fileList) {
+export function loadState(fileList) {
   const file = fileList[0];
   if (!file) return;
 
   const reader = new FileReader();
+
   reader.onload = () => {
     try {
       const data = JSON.parse(reader.result);
