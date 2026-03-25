@@ -1,30 +1,77 @@
-// ===============================
-// storage.js
-// ===============================
-
 // -------------------------------
 // Load initial auction data
 // -------------------------------
+
 async function loadAuctionData() {
   try {
-    const response = await fetch('./data/auction-data.json');
+    let playersFromFirebase = [];
 
-    if (!response.ok) {
-      throw new Error('Failed to load auction data');
+    // 🔥 Try Firebase first
+    try {
+      playersFromFirebase = await loadPlayersFromFirebase();
+    } catch (err) {
+      console.warn("Firebase load failed:", err);
     }
 
-    const data = await response.json();
+    // ============================
+    // ✅ CASE 1: Firebase has data
+    // ============================
+    if (playersFromFirebase && playersFromFirebase.length > 0) {
+      console.log("✅ Using Firebase player data");
 
-    // Inject players into existing pools
-    if (data.players) {
-      Object.keys(data.players).forEach(cat => {
-        state.pools[cat] = data.players[cat];
+      // Reset pools
+      state.pools = { X: [], P: [], A: [], B: [], UNSOLD: [] };
+
+      playersFromFirebase.forEach(player => {
+        const pool = player.pool?.toUpperCase() || "UNSOLD";
+
+        if (!state.pools[pool]) {
+          state.pools[pool] = [];
+        }
+
+        state.pools[pool].push({
+          id: player.id,
+          name: player.name,
+          basePrice: player.basePrice,
+          soldPrice: player.soldPrice || null,
+          teamId: player.teamId || null
+        });
       });
-    }
-    
-    state.teams = data.captains || [];
 
-    // Reset runtime values
+      // ⚠️ Teams still come from JSON (you can later move this to Firebase too)
+      const response = await fetch('./data/auction-data.json');
+      const data = await response.json();
+
+      state.teams = data.captains || [];
+    }
+
+    // ============================
+    // ✅ CASE 2: Fallback to JSON
+    // ============================
+    else {
+      console.log("📁 Using local JSON data");
+
+      const response = await fetch('./data/auction-data.json');
+
+      if (!response.ok) {
+        throw new Error('Failed to load auction data');
+      }
+
+      const data = await response.json();
+
+      // Inject players into pools
+      if (data.players) {
+        Object.keys(data.players).forEach(cat => {
+          state.pools[cat] = data.players[cat];
+        });
+      }
+
+      state.teams = data.captains || [];
+    }
+
+    // ============================
+    // 🔄 Reset runtime values
+    // ============================
     state.sales = [];
     state.skipped = { X: [], P: [], A: [], B: [], UNSOLD: [] };
     state.current = null;
@@ -34,7 +81,6 @@ async function loadAuctionData() {
     console.error('Auction data load error:', err);
   }
 }
-
 
 // -------------------------------
 // Export auction results as CSV
