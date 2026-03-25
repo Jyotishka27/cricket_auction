@@ -1,6 +1,14 @@
 import { state } from './state.js';
 import { fmt, catLabel } from './utils.js';
-import { placeBid, nextPlayer, skipPlayer, undoLastSale, sell } from './actions.js';
+import {
+  placeBid,
+  nextPlayer,
+  skipPlayer,
+  undoLastSale,
+  sell,
+  setCategory,
+  setRightPanelTab
+} from './actions.js';
 
 // -- Cached DOM elements --
 export const dom = {
