@@ -1,12 +1,15 @@
-function fmt(num) {
+import { CATEGORY_LABELS, REDUCTION_FACTOR, MIN_PRICE } from './config.js';
+import { dom } from './renderer.js';
+
+export function fmt(num) {
   return new Intl.NumberFormat('en-IN').format(num);
 }
 
-function catLabel(cat) {
+export function catLabel(cat) {
   return CATEGORY_LABELS[cat] || 'Unknown';
 }
 
-function applyUnsoldReduction(player) {
+export function applyUnsoldReduction(player) {
   player.unsoldCount = (player.unsoldCount || 0) + 1;
   player.basePrice = Math.max(
     Math.floor(player.basePrice * REDUCTION_FACTOR),
