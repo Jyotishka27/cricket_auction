@@ -1,6 +1,6 @@
 // use the global AUTOSAVE_KEY from config.js
 
-function autoSaveState() {
+export function autoSaveState() {
   const payload = {
     category: state.category,
     pools: state.pools,
@@ -19,7 +19,7 @@ function autoSaveState() {
   }
 }
 
-function restoreAutoSavedState() {
+export function restoreAutoSavedState() {
   const raw = localStorage.getItem(AUTOSAVE_KEY);
   if (!raw) return false;
 
